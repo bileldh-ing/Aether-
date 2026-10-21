@@ -1,0 +1,55 @@
+import 'package:flutter/widgets.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+/// One place for every glyph, so the icon set can be swapped in one file.
+abstract final class AppIcons {
+  static const IconData bolt = PhosphorIconsFill.lightning;
+  static const IconData boltOutline = PhosphorIconsRegular.lightning;
+  static const IconData sun = PhosphorIconsRegular.sun;
+  static const IconData sunFill = PhosphorIconsFill.sun;
+  static const IconData chart = PhosphorIconsRegular.chartBar;
+  static const IconData gear = PhosphorIconsRegular.gearSix;
+  static const IconData bell = PhosphorIconsRegular.bell;
+  static const IconData back = PhosphorIconsRegular.arrowLeft;
+  static const IconData chevronLeft = PhosphorIconsBold.caretLeft;
+  static const IconData chevronRight = PhosphorIconsBold.caretRight;
+  static const IconData play = PhosphorIconsFill.play;
+  static const IconData qr = PhosphorIconsRegular.qrCode;
+  static const IconData shield = PhosphorIconsFill.shieldCheck;
+  static const IconData inverter = PhosphorIconsRegular.solarPanel;
+  static const IconData check = PhosphorIconsFill.checkCircle;
+  static const IconData chip = PhosphorIconsFill.cpu;
+  static const IconData home = PhosphorIconsFill.houseLine;
+  static const IconData homeOutline = PhosphorIconsRegular.houseLine;
+  static const IconData power = PhosphorIconsBold.power;
+  static const IconData plug = PhosphorIconsRegular.plugs;
+  static const IconData grid = PhosphorIconsRegular.lightning;
+  static const IconData battery = PhosphorIconsRegular.batteryHigh;
+  static const IconData bluetooth = PhosphorIconsRegular.bluetooth;
+  static const IconData nearby = PhosphorIconsRegular.broadcast;
+  static const IconData warning = PhosphorIconsFill.warning;
+  static const IconData storm = PhosphorIconsRegular.cloudLightning;
+  static const IconData thermometer = PhosphorIconsRegular.thermometerHot;
+  static const IconData download = PhosphorIconsRegular.downloadSimple;
+  static const IconData userPlus = PhosphorIconsRegular.userPlus;
+  static const IconData users = PhosphorIconsRegular.users;
+  static const IconData key = PhosphorIconsRegular.key;
+  static const IconData fingerprint = PhosphorIconsRegular.fingerprint;
+  static const IconData lock = PhosphorIconsRegular.lockSimple;
+  static const IconData devices = PhosphorIconsRegular.devices;
+  static const IconData trash = PhosphorIconsRegular.trash;
+  static const IconData info = PhosphorIconsRegular.info;
+  static const IconData currency = PhosphorIconsRegular.currencyEur;
+  static const IconData privacy = PhosphorIconsRegular.eyeSlash;
+  static const IconData leaf = PhosphorIconsRegular.leaf;
+  static const IconData coins = PhosphorIconsRegular.coins;
+  static const IconData export = PhosphorIconsRegular.export;
+  static const IconData restart = PhosphorIconsRegular.arrowClockwise;
+  static const IconData pencil = PhosphorIconsRegular.pencilSimple;
+  static const IconData calendar = PhosphorIconsRegular.calendarBlank;
+  static const IconData wifiOff = PhosphorIconsRegular.wifiSlash;
+  static const IconData close = PhosphorIconsRegular.x;
+  static const IconData pause = PhosphorIconsFill.pauseCircle;
+  static const IconData flask = PhosphorIconsRegular.flask;
+  static const IconData clock = PhosphorIconsRegular.clock;
+}

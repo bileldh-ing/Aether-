@@ -1,0 +1,39 @@
+name: aether_grid
+description: Aether Grid — companion app for the Aether Smart Home Power Core.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: any
+  go_router: any
+  google_fonts: any
+  flutter_animate: any
+  fl_chart: any
+  phosphor_flutter: any
+  flutter_blue_plus: any
+  mobile_scanner: any
+  local_auth: any
+  flutter_secure_storage: any
+  permission_handler: any
+  flutter_local_notifications: any
+  shared_preferences: any
+  intl: any
+  web_socket_channel: any
+  connectivity_plus: any
+  cryptography: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/google_fonts/
