@@ -54,8 +54,9 @@ class _PairingScreenState extends ConsumerState<PairingScreen>
   @override
   Widget build(BuildContext context) {
     ref.listen(pairingProvider.select((s) => s.phase), (prev, next) {
-      if (next == PairingPhase.success && prev != PairingPhase.success)
+      if (next == PairingPhase.success && prev != PairingPhase.success) {
         _onSuccess();
+      }
     });
     final s = ref.watch(pairingProvider);
     final found = s.node != null &&

@@ -496,8 +496,9 @@ class _ReserveSliderState extends ConsumerState<_ReserveSlider> {
         divisions: 18,
         onChanged: widget.enabled
             ? (v) {
-                if ((v.round()) != (_drag ?? widget.value).round())
+                if ((v.round()) != (_drag ?? widget.value).round()) {
                   Haptics.nav();
+                }
                 setState(() => _drag = v);
               }
             : null,
@@ -568,8 +569,9 @@ class _SecurityCard extends ConsumerWidget {
           title: 'Rotate owner key',
           subtitle: 'Issue a new key and revoke the old one',
           onTap: () async {
-            if (!await _reAuth.confirm('Confirm to rotate the owner key'))
+            if (!await _reAuth.confirm('Confirm to rotate the owner key')) {
               return;
+            }
             await ref.read(securityServiceProvider).rotate();
             ref.invalidate(ownerKeyProvider);
             ref
@@ -662,8 +664,10 @@ class _MembersCard extends ConsumerWidget {
   }
 
   Future<void> _invite(BuildContext context, WidgetRef ref) async {
-    if (!await _reAuth.confirm('Confirm to invite someone to your Power Core'))
+    if (!await _reAuth
+        .confirm('Confirm to invite someone to your Power Core')) {
       return;
+    }
     if (!context.mounted) return;
     final ctrl = TextEditingController();
     var role = Role.member;
@@ -831,8 +835,9 @@ class _RemoveDevice extends ConsumerWidget {
             ),
           );
           if (ok != true) return;
-          if (!await _reAuth.confirm('Confirm to remove the Power Core'))
+          if (!await _reAuth.confirm('Confirm to remove the Power Core')) {
             return;
+          }
           await ref.read(securityServiceProvider).wipe();
           await ref.read(settingsProvider.notifier).reset();
           if (context.mounted) context.go(Routes.onboarding);

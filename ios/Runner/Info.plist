@@ -56,15 +56,20 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Aether Grid uses Bluetooth to find and securely pair your Power Core.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan the QR code on your Power Core to pair it.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Confirm sensitive changes to your Power Core with Face ID.</string>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 </dict>
 </plist>
