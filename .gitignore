@@ -46,3 +46,6 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Rendered review screens (published by CI to the ci-reports branch)
+/test_screens/goldens/

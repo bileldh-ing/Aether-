@@ -65,6 +65,42 @@ jobs:
         if: steps.format.outcome == 'failure' || steps.analyze.outcome == 'failure' || steps.test.outcome == 'failure'
         run: exit 1
 
+  screens:
+    needs: verify
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Render screens
+        continue-on-error: true
+        run: |
+          flutter pub get
+          flutter test test_screens --update-goldens 2>&1 | tee screens.txt
+
+      - name: Publish screens to ci-reports
+        run: |
+          mkdir -p /tmp/screens
+          cp test_screens/goldens/*.png /tmp/screens/ 2>/dev/null || true
+          cp screens.txt /tmp/screens/ || true
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          for attempt in 1 2 3; do
+            git fetch origin ci-reports
+            git checkout -B ci-reports origin/ci-reports
+            rm -rf screens && mkdir screens && cp /tmp/screens/* screens/
+            git add -A screens
+            git commit -m "Screens for ${GITHUB_SHA::7}" || exit 0
+            git push origin HEAD:ci-reports && exit 0
+            sleep 5
+          done
+
   android-apk:
     needs: verify
     runs-on: ubuntu-latest
