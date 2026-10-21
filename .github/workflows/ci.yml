@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Format check
+        id: format
+        continue-on-error: true
+        run: dart format --output=none --set-exit-if-changed lib test 2>&1 | tee format.txt
+
+      - name: Analyze
+        id: analyze
+        continue-on-error: true
+        run: flutter analyze --no-fatal-infos 2>&1 | tee analyze.txt; exit ${PIPESTATUS[0]}
+
+      - name: Test
+        id: test
+        continue-on-error: true
+        run: flutter test --reporter expanded 2>&1 | tee test.txt; exit ${PIPESTATUS[0]}
+
+      - name: Publish report to ci-reports branch
+        if: github.event_name == 'push'
+        run: |
+          mkdir -p /tmp/report
+          {
+            echo "commit: ${GITHUB_SHA}"
+            echo "flutter: $(flutter --version | head -1)"
+            echo "format: ${{ steps.format.outcome }}"
+            echo "analyze: ${{ steps.analyze.outcome }}"
+            echo "test: ${{ steps.test.outcome }}"
+          } > /tmp/report/summary.txt
+          cp format.txt analyze.txt test.txt /tmp/report/ || true
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git fetch origin ci-reports || true
+          git checkout --orphan ci-reports-tmp
+          git rm -rf . > /dev/null
+          cp /tmp/report/* .
+          git add summary.txt format.txt analyze.txt test.txt
+          git commit -m "CI report for ${GITHUB_SHA::7}"
+          git push -f origin HEAD:ci-reports
+
+      - name: Fail if any check failed
+        if: steps.analyze.outcome == 'failure' || steps.test.outcome == 'failure'
+        run: exit 1
