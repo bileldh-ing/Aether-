@@ -82,7 +82,8 @@ class _FlowDiagramState extends State<FlowDiagram>
                     size: Size(w, h),
                     painter: _FlowPainter(
                       t: _c.value,
-                      solar: solar,
+                      // Start the solar line below its label and value.
+                      solar: solar.translate(0, 80),
                       core: core,
                       home: home,
                       grid: grid,
