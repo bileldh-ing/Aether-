@@ -494,7 +494,7 @@ class _HeatStrip extends StatelessWidget {
                             ? AppColors.mint.withValues(alpha: 0.35)
                             : last[i].independent
                                 ? AppColors.mint
-                                : AppColors.surfaceHigh,
+                                : Colors.white.withValues(alpha: 0.07),
                       ),
                     ),
                 ],

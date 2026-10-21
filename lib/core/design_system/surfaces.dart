@@ -66,6 +66,7 @@ class GlassCard extends StatelessWidget {
     this.height,
     this.width,
     this.blur = 24,
+    this.tint = AppColors.glassFill,
   });
 
   final Widget child;
@@ -74,6 +75,10 @@ class GlassCard extends StatelessWidget {
   final double? height;
   final double? width;
   final double blur;
+
+  /// Fill over the blurred backdrop. Use a dark tint when the card floats
+  /// over bright imagery so text keeps its contrast.
+  final Color tint;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +92,7 @@ class GlassCard extends StatelessWidget {
           width: width,
           padding: padding,
           decoration: BoxDecoration(
-            color: AppColors.glassFill,
+            color: tint,
             borderRadius: r,
             border: Border.all(color: AppColors.glassBorder),
           ),

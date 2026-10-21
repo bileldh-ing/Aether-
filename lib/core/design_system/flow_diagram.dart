@@ -63,11 +63,13 @@ class _FlowDiagramState extends State<FlowDiagram>
     return LayoutBuilder(
       builder: (context, box) {
         final w = box.maxWidth;
-        final h = w * 1.05;
-        final solar = Offset(w / 2, h * 0.12);
-        final core = Offset(w / 2, h * 0.5);
-        final home = Offset(w * 0.18, h * 0.86);
-        final grid = Offset(w * 0.82, h * 0.86);
+        // Each node's label + value hangs ~76 px below its centre, so the
+        // bottom row sits high enough to keep both inside the canvas.
+        final h = w * 1.1;
+        final solar = Offset(w / 2, h * 0.1);
+        final core = Offset(w / 2, h * 0.45);
+        final home = Offset(w * 0.18, h * 0.74);
+        final grid = Offset(w * 0.82, h * 0.74);
         return SizedBox(
           width: w,
           height: h,

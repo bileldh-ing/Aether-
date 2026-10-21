@@ -6,7 +6,8 @@ plugins {
 
 android {
     namespace = "com.aethergrid.aether_grid"
-    compileSdk = flutter.compileSdkVersion
+    // permission_handler_android requires API 37 to compile against.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

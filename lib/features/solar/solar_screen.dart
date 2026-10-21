@@ -200,10 +200,13 @@ class _ProductionChart extends StatelessWidget {
                 showTitles: true,
                 reservedSize: 30,
                 interval: 1,
-                getTitlesWidget: (v, m) => Text('${v.toInt()}kW',
-                    style: AppType.mono(9,
-                        weight: FontWeight.w400,
-                        color: AppColors.textTertiary)),
+                // fl_chart also labels the axis bounds; keep whole kW only.
+                getTitlesWidget: (v, m) => v != v.roundToDouble()
+                    ? const SizedBox.shrink()
+                    : Text('${v.toInt()}kW',
+                        style: AppType.mono(9,
+                            weight: FontWeight.w400,
+                            color: AppColors.textTertiary)),
               ),
             ),
             bottomTitles: AxisTitles(
@@ -211,13 +214,17 @@ class _ProductionChart extends StatelessWidget {
                 showTitles: true,
                 interval: 4,
                 reservedSize: 22,
-                getTitlesWidget: (v, m) => Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text('${v.toInt().toString().padLeft(2, '0')}:00',
-                      style: AppType.mono(9,
-                          weight: FontWeight.w400,
-                          color: AppColors.textTertiary)),
-                ),
+                getTitlesWidget: (v, m) =>
+                    v.toInt() % 4 != 0 || v != v.roundToDouble()
+                        ? const SizedBox.shrink()
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                                '${v.toInt().toString().padLeft(2, '0')}:00',
+                                style: AppType.mono(9,
+                                    weight: FontWeight.w400,
+                                    color: AppColors.textTertiary)),
+                          ),
               ),
             ),
           ),

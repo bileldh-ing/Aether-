@@ -21,7 +21,8 @@ class StreakScreen extends ConsumerWidget {
     };
     final now = history.isEmpty ? DateTime.now() : history.last.date;
     final months = [
-      for (var i = 2; i >= 0; i--) DateTime(now.year, now.month - i)
+      // Newest month first, so the live streak is what you see.
+      for (var i = 0; i <= 2; i++) DateTime(now.year, now.month - i)
     ];
     final independentCount = history.where((d) => d.independent).length;
 
@@ -61,7 +62,7 @@ class StreakScreen extends ConsumerWidget {
                 style: AppType.body(13.5, color: AppColors.textSecondary)),
             const SizedBox(height: 6),
             Text(
-              '$independentCount of the last ${history.length} days ran on 5% grid import or less.',
+              '$independentCount of the last ${history.length} days ran on ≤ 5% grid import.',
               style: AppType.body(12.5, color: AppColors.textTertiary),
             ),
             const SizedBox(height: 20),

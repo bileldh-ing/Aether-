@@ -242,12 +242,14 @@ class _SlideView extends StatelessWidget {
     final headline = (w * 0.105).clamp(34.0, 46.0);
     final badgeTop = topInset + 18 + h * 0.10;
     final heroTop = h * 0.405;
-    final cardBottom = bottomReserved + h * 0.105;
+    // On the product slide the card overlaps the lower body of the Core,
+    // as in the reference; the art slides keep it clear of the hero.
+    final cardBottom = bottomReserved + h * (index == 2 ? 0.05 : 0.105);
 
     final Widget hero = switch (index) {
       0 => SunArt(size: w * 0.78),
       1 => GridArt(size: w * 0.8),
-      _ => _FloatingProduct(width: w * 0.6),
+      _ => _FloatingProduct(width: w * 0.68),
     };
 
     return Stack(
@@ -330,6 +332,7 @@ class _InfoCard extends StatelessWidget {
       child: GlassCard(
         height: 64,
         radius: AppRadii.hero,
+        tint: const Color(0xD91B1C1F),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           children: [
