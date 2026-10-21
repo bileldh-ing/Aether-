@@ -103,7 +103,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           builder: (context, box) {
             final w = box.maxWidth;
             final h = box.maxHeight;
-            final control = 60.0;
+            const control = 60.0;
             final bottomInset = math.max(pad.bottom, 12.0) + 14;
             return Stack(
               children: [

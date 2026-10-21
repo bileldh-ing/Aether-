@@ -292,7 +292,7 @@ class _Bars extends StatelessWidget {
         BarChartData(
           maxY: maxY,
           alignment: BarChartAlignment.spaceAround,
-          barTouchData: BarTouchData(enabled: false),
+          barTouchData: const BarTouchData(enabled: false),
           borderData: FlBorderData(show: false),
           gridData: FlGridData(
             drawVerticalLine: false,

@@ -34,7 +34,7 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
 
   // Live state.
   double _storedWh = capacityWh * 0.84; // ≈ 860 Wh (reference)
-  double _soh = 100;
+  final double _soh = 100;
   EnergyMode _mode = EnergyMode.selfConsumption;
   int _reserve = 20;
   bool _autonomy = true;
