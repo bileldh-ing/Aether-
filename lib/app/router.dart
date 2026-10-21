@@ -24,7 +24,8 @@ abstract final class Routes {
   static const gallery = '/gallery';
 }
 
-CustomTransitionPage<void> _fade(Widget child, GoRouterState s, {Duration d = AppMotion.medium}) =>
+CustomTransitionPage<void> _fade(Widget child, GoRouterState s,
+        {Duration d = AppMotion.medium}) =>
     CustomTransitionPage<void>(
       key: s.pageKey,
       child: child,
@@ -41,11 +42,21 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: paired ? Routes.home : Routes.onboarding,
     routes: [
-      GoRoute(path: Routes.onboarding, pageBuilder: (c, s) => _fade(const OnboardingScreen(), s)),
-      GoRoute(path: Routes.permissions, pageBuilder: (c, s) => _fade(const PermissionsScreen(), s, d: AppMotion.hero)),
-      GoRoute(path: Routes.pairing, pageBuilder: (c, s) => _fade(const PairingScreen(), s)),
+      GoRoute(
+          path: Routes.onboarding,
+          pageBuilder: (c, s) => _fade(const OnboardingScreen(), s)),
+      GoRoute(
+          path: Routes.permissions,
+          pageBuilder: (c, s) =>
+              _fade(const PermissionsScreen(), s, d: AppMotion.hero)),
+      GoRoute(
+          path: Routes.pairing,
+          pageBuilder: (c, s) => _fade(const PairingScreen(), s)),
       GoRoute(path: Routes.qr, builder: (c, s) => const QrScanScreen()),
-      GoRoute(path: Routes.home, pageBuilder: (c, s) => _fade(const HomeShell(), s, d: AppMotion.hero)),
+      GoRoute(
+          path: Routes.home,
+          pageBuilder: (c, s) =>
+              _fade(const HomeShell(), s, d: AppMotion.hero)),
       GoRoute(path: Routes.flow, builder: (c, s) => const EnergyFlowScreen()),
       GoRoute(path: Routes.streak, builder: (c, s) => const StreakScreen()),
       GoRoute(path: Routes.gallery, builder: (c, s) => const GalleryScreen()),

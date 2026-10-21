@@ -41,13 +41,15 @@ abstract final class Copy {
 
   // Pairing
   static const connectTitle = 'Connect Your Module';
-  static const connectSubtitle = 'Sync your local storage cell to the automated grid network in real-time.';
+  static const connectSubtitle =
+      'Sync your local storage cell to the automated grid network in real-time.';
   static const ownerKey = 'Owner Encryption Key';
   static const inverterBridge = 'Solar Inverter Bridge';
   static const microDetected = '3x Microinverters Detected';
   static const ready = 'Ready';
   static const looking = 'Looking for your Power Core…';
-  static const notFound = 'No Power Core found. Make sure the LED ring is glowing mint and you are within 3 m.';
+  static const notFound =
+      'No Power Core found. Make sure the LED ring is glowing mint and you are within 3 m.';
 
   // Toasts
   static const autonomyPaused = 'Autonomy Mode paused';

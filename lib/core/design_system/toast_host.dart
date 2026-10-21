@@ -32,7 +32,9 @@ class ToastHost extends ConsumerWidget {
               transitionBuilder: (child, a) => FadeTransition(
                 opacity: a,
                 child: SlideTransition(
-                  position: Tween(begin: const Offset(0, -0.3), end: Offset.zero).animate(a),
+                  position:
+                      Tween(begin: const Offset(0, -0.3), end: Offset.zero)
+                          .animate(a),
                   child: child,
                 ),
               ),
@@ -44,7 +46,8 @@ class ToastHost extends ConsumerWidget {
                         liveRegion: true,
                         child: GlassCard(
                           radius: AppRadii.pill,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 11),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -55,13 +58,16 @@ class ToastHost extends ConsumerWidget {
                                   ToastTone.neutral => AppIcons.bolt,
                                 },
                                 size: 16,
-                                color: toast.tone == ToastTone.warning ? AppColors.amber : AppColors.mint,
+                                color: toast.tone == ToastTone.warning
+                                    ? AppColors.amber
+                                    : AppColors.mint,
                               ),
                               const SizedBox(width: 10),
                               Flexible(
                                 child: Text(
                                   toast.message,
-                                  style: AppType.body(13, weight: FontWeight.w600),
+                                  style:
+                                      AppType.body(13, weight: FontWeight.w600),
                                   maxLines: 2,
                                 ),
                               ),

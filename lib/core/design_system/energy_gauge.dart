@@ -67,12 +67,18 @@ class _EnergyGaugeState extends State<EnergyGauge> {
               Positioned(
                 left: d * 0.5 - math.cos(math.pi / 4) * d * 0.5 - 4,
                 bottom: d * 0.5 - math.sin(math.pi / 4) * d * 0.5 - 22,
-                child: Text('0%', style: AppType.mono(10.5, weight: FontWeight.w500, color: AppColors.textTertiary)),
+                child: Text('0%',
+                    style: AppType.mono(10.5,
+                        weight: FontWeight.w500,
+                        color: AppColors.textTertiary)),
               ),
               Positioned(
                 right: d * 0.5 - math.cos(math.pi / 4) * d * 0.5 - 10,
                 bottom: d * 0.5 - math.sin(math.pi / 4) * d * 0.5 - 22,
-                child: Text('100%', style: AppType.mono(10.5, weight: FontWeight.w500, color: AppColors.textTertiary)),
+                child: Text('100%',
+                    style: AppType.mono(10.5,
+                        weight: FontWeight.w500,
+                        color: AppColors.textTertiary)),
               ),
             ],
           ],
@@ -94,7 +100,10 @@ class _SpringCurve extends Curve {
 }
 
 class GaugePainter extends CustomPainter {
-  GaugePainter({required this.fraction, required this.color, this.trackColor = AppColors.track});
+  GaugePainter(
+      {required this.fraction,
+      required this.color,
+      this.trackColor = AppColors.track});
 
   final double fraction;
   final Color color;
@@ -123,7 +132,11 @@ class GaugePainter extends CustomPainter {
     final shader = SweepGradient(
       startAngle: 0,
       endAngle: s,
-      colors: [color.withValues(alpha: 0.08), color.withValues(alpha: 0.55), color],
+      colors: [
+        color.withValues(alpha: 0.08),
+        color.withValues(alpha: 0.55),
+        color
+      ],
       stops: const [0, 0.55, 1],
       transform: const GradientRotation(start),
     ).createShader(rect);
@@ -156,9 +169,11 @@ class GaugePainter extends CustomPainter {
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 7),
     );
     canvas.drawCircle(p, 4, Paint()..color = color);
-    canvas.drawCircle(p, 1.6, Paint()..color = Colors.white.withValues(alpha: 0.9));
+    canvas.drawCircle(
+        p, 1.6, Paint()..color = Colors.white.withValues(alpha: 0.9));
   }
 
   @override
-  bool shouldRepaint(GaugePainter old) => old.fraction != fraction || old.color != color;
+  bool shouldRepaint(GaugePainter old) =>
+      old.fraction != fraction || old.color != color;
 }

@@ -23,12 +23,15 @@ class LiveLinkSource {
   }
 
   /// Commands are signed by the owner key; the signature travels with them.
-  void send(String command, Map<String, Object?> args, {required String signature}) {
-    _channel?.sink.add(jsonEncode({'cmd': command, 'args': args, 'sig': signature}));
+  void send(String command, Map<String, Object?> args,
+      {required String signature}) {
+    _channel?.sink
+        .add(jsonEncode({'cmd': command, 'args': args, 'sig': signature}));
   }
 
   static EnergyMode parseMode(String raw) =>
-      EnergyMode.values.firstWhere((m) => m.name == raw, orElse: () => EnergyMode.selfConsumption);
+      EnergyMode.values.firstWhere((m) => m.name == raw,
+          orElse: () => EnergyMode.selfConsumption);
 
   Future<void> close() async => _channel?.sink.close();
 }

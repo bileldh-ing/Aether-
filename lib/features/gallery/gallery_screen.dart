@@ -22,11 +22,15 @@ class _GalleryScreenState extends State<GalleryScreen> {
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(AppSpace.screenH, 8, AppSpace.screenH, 40),
+          padding: const EdgeInsets.fromLTRB(
+              AppSpace.screenH, 8, AppSpace.screenH, 40),
           children: [
             Row(
               children: [
-                IconCircleButton(icon: AppIcons.back, semanticLabel: 'Back', onTap: () => context.pop()),
+                IconCircleButton(
+                    icon: AppIcons.back,
+                    semanticLabel: 'Back',
+                    onTap: () => context.pop()),
                 const Spacer(),
                 const StatusPill(label: 'GALLERY'),
                 const Spacer(),
@@ -41,7 +45,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 StatusPill(label: 'GRID ONLINE'),
                 StatusPill(label: 'PAIRING READY'),
                 StatusPill(label: 'ISLAND MODE', color: AppColors.amber),
-                StatusPill(label: 'NODE OFFLINE', color: AppColors.textTertiary, breathe: false),
+                StatusPill(
+                    label: 'NODE OFFLINE',
+                    color: AppColors.textTertiary,
+                    breathe: false),
               ],
             ),
             const SectionHeader('EnergyGauge + AnimatedNumber'),
@@ -54,11 +61,13 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     diameter: 200,
                     child: AnimatedNumber(
                       value: _soc * 1024,
-                      style: AppType.display(48, weight: FontWeight.w300, tabular: true),
+                      style: AppType.display(48,
+                          weight: FontWeight.w300, tabular: true),
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Slider(value: _soc, onChanged: (v) => setState(() => _soc = v)),
+                  Slider(
+                      value: _soc, onChanged: (v) => setState(() => _soc = v)),
                 ],
               ),
             ),
@@ -76,14 +85,21 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         GestureDetector(
                           onTap: () => setState(() => _led = s),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
                             decoration: BoxDecoration(
-                              color: s == _led ? AppColors.mint : AppColors.surfaceHigh,
-                              borderRadius: BorderRadius.circular(AppRadii.pill),
+                              color: s == _led
+                                  ? AppColors.mint
+                                  : AppColors.surfaceHigh,
+                              borderRadius:
+                                  BorderRadius.circular(AppRadii.pill),
                             ),
                             child: Text(
                               s.name,
-                              style: AppType.body(11, color: s == _led ? AppColors.ctaText : AppColors.textSecondary),
+                              style: AppType.body(11,
+                                  color: s == _led
+                                      ? AppColors.ctaText
+                                      : AppColors.textSecondary),
                             ),
                           ),
                         ),
@@ -98,7 +114,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 outer: 240,
                 inner: 160,
                 progress: 0.6,
-                child: Center(child: Text('NEXUS-CORE-901', style: AppType.mono(13, weight: FontWeight.w700))),
+                child: Center(
+                    child: Text('NEXUS-CORE-901',
+                        style: AppType.mono(13, weight: FontWeight.w700))),
               ),
             ),
             const SectionHeader('SwipeToConnect · PagerControl'),
@@ -122,14 +140,22 @@ class _GalleryScreenState extends State<GalleryScreen> {
             const GlassCard(
               height: 64,
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Align(alignment: Alignment.centerLeft, child: Text('Glass surface')),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Glass surface')),
             ),
             const SizedBox(height: 12),
             PrimaryButton(label: 'Initialize Smart Node', onTap: () {}),
             const SizedBox(height: 12),
             GhostButton(label: 'Try again', onTap: () {}),
             const SectionHeader('FlowDiagram'),
-            const FlowDiagram(solarW: 2400, homeW: 620, gridW: -1500, batteryW: 280, soc: 0.84, gridOnline: true),
+            const FlowDiagram(
+                solarW: 2400,
+                homeW: 620,
+                gridW: -1500,
+                batteryW: 280,
+                soc: 0.84,
+                gridOnline: true),
           ],
         ),
       ),

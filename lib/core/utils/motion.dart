@@ -9,7 +9,8 @@ extension MotionX on BuildContext {
 }
 
 /// A repeating controller that stays still under reduced motion.
-mixin LoopingAnimation<T extends StatefulWidget> on State<T>, TickerProviderStateMixin<T> {
+mixin LoopingAnimation<T extends StatefulWidget>
+    on State<T>, TickerProviderStateMixin<T> {
   late final AnimationController loop;
   Duration get loopDuration;
   bool get loopReverse => false;

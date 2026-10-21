@@ -37,8 +37,10 @@ class FlowDiagram extends StatefulWidget {
   State<FlowDiagram> createState() => _FlowDiagramState();
 }
 
-class _FlowDiagramState extends State<FlowDiagram> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(seconds: 6));
+class _FlowDiagramState extends State<FlowDiagram>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: const Duration(seconds: 6));
 
   @override
   void didChangeDependencies() {
@@ -90,8 +92,10 @@ class _FlowDiagramState extends State<FlowDiagram> with SingleTickerProviderStat
                   ),
                 ),
               ),
-              _node(solar, AppIcons.sunFill, AppColors.amber, 'Solar', Fmt.watts(widget.solarW)),
-              _node(home, AppIcons.home, AppColors.textPrimary, 'Home', Fmt.watts(widget.homeW)),
+              _node(solar, AppIcons.sunFill, AppColors.amber, 'Solar',
+                  Fmt.watts(widget.solarW)),
+              _node(home, AppIcons.home, AppColors.textPrimary, 'Home',
+                  Fmt.watts(widget.homeW)),
               _node(
                 grid,
                 AppIcons.plug,
@@ -111,7 +115,8 @@ class _FlowDiagramState extends State<FlowDiagram> with SingleTickerProviderStat
     );
   }
 
-  Widget _node(Offset at, IconData icon, Color color, String label, String value) {
+  Widget _node(
+      Offset at, IconData icon, Color color, String label, String value) {
     const s = 64.0;
     return Positioned(
       left: at.dx - 60,
@@ -132,7 +137,8 @@ class _FlowDiagramState extends State<FlowDiagram> with SingleTickerProviderStat
               child: Icon(icon, color: color, size: 24),
             ),
             const SizedBox(height: 8),
-            Text(label, style: AppType.body(12, color: AppColors.textSecondary)),
+            Text(label,
+                style: AppType.body(12, color: AppColors.textSecondary)),
             const SizedBox(height: 2),
             Text(value, style: AppType.mono(13)),
           ],
@@ -160,20 +166,28 @@ class _FlowDiagramState extends State<FlowDiagram> with SingleTickerProviderStat
             decoration: BoxDecoration(
               color: AppColors.surface,
               shape: BoxShape.circle,
-              border: Border.all(color: widget.accent.withValues(alpha: 0.7), width: 1.5),
-              boxShadow: [BoxShadow(color: widget.accent.withValues(alpha: 0.18), blurRadius: 24)],
+              border: Border.all(
+                  color: widget.accent.withValues(alpha: 0.7), width: 1.5),
+              boxShadow: [
+                BoxShadow(
+                    color: widget.accent.withValues(alpha: 0.18),
+                    blurRadius: 24)
+              ],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(AppIcons.bolt, color: widget.accent, size: 20),
                 const SizedBox(height: 2),
-                Text('${(widget.soc * 100).round()}%', style: AppType.display(20, weight: FontWeight.w500, tabular: true)),
+                Text('${(widget.soc * 100).round()}%',
+                    style: AppType.display(20,
+                        weight: FontWeight.w500, tabular: true)),
               ],
             ),
           ),
           const SizedBox(height: 8),
-          Text('Power Core', style: AppType.body(12, color: AppColors.textSecondary)),
+          Text('Power Core',
+              style: AppType.body(12, color: AppColors.textSecondary)),
           const SizedBox(height: 2),
           Text(dir, style: AppType.mono(12, color: widget.accent)),
         ],
@@ -236,7 +250,8 @@ class _FlowPainter extends CustomPainter {
           ..color = color.withValues(alpha: 0.25 * fade)
           ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
       );
-      canvas.drawCircle(pos, 2.2, Paint()..color = color.withValues(alpha: 0.9 * fade));
+      canvas.drawCircle(
+          pos, 2.2, Paint()..color = color.withValues(alpha: 0.9 * fade));
     }
   }
 

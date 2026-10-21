@@ -28,21 +28,31 @@ class LedSpec {
 
   /// Section 6.3: device state ↔ LED ring ↔ app. One mapping for everything.
   static LedSpec of(NodeState s) => switch (s) {
-        NodeState.idle => const LedSpec(AppColors.mint, LedPattern.breathe, Duration(milliseconds: 4200)),
-        NodeState.charging => const LedSpec(AppColors.mint, LedPattern.fill, Duration(milliseconds: 2200)),
-        NodeState.discharging => const LedSpec(AppColors.mint, LedPattern.doublePulse, Duration(milliseconds: 2600)),
-        NodeState.island => const LedSpec(AppColors.amber, LedPattern.breathe, Duration(milliseconds: 3200)),
-        NodeState.lowReserve => const LedSpec(AppColors.amber, LedPattern.fastPulse, Duration(milliseconds: 800)),
-        NodeState.pairing => const LedSpec(AppColors.mint, LedPattern.sweep, Duration(milliseconds: 1600)),
-        NodeState.updating => const LedSpec(Colors.white, LedPattern.breathe, Duration(milliseconds: 3600)),
-        NodeState.offline => const LedSpec(AppColors.textTertiary, LedPattern.steady, Duration(seconds: 1)),
-        NodeState.fault => const LedSpec(AppColors.danger, LedPattern.steady, Duration(seconds: 1)),
+        NodeState.idle => const LedSpec(
+            AppColors.mint, LedPattern.breathe, Duration(milliseconds: 4200)),
+        NodeState.charging => const LedSpec(
+            AppColors.mint, LedPattern.fill, Duration(milliseconds: 2200)),
+        NodeState.discharging => const LedSpec(AppColors.mint,
+            LedPattern.doublePulse, Duration(milliseconds: 2600)),
+        NodeState.island => const LedSpec(
+            AppColors.amber, LedPattern.breathe, Duration(milliseconds: 3200)),
+        NodeState.lowReserve => const LedSpec(
+            AppColors.amber, LedPattern.fastPulse, Duration(milliseconds: 800)),
+        NodeState.pairing => const LedSpec(
+            AppColors.mint, LedPattern.sweep, Duration(milliseconds: 1600)),
+        NodeState.updating => const LedSpec(
+            Colors.white, LedPattern.breathe, Duration(milliseconds: 3600)),
+        NodeState.offline => const LedSpec(
+            AppColors.textTertiary, LedPattern.steady, Duration(seconds: 1)),
+        NodeState.fault => const LedSpec(
+            AppColors.danger, LedPattern.steady, Duration(seconds: 1)),
       };
 }
 
 /// Animated additive glow drawn exactly over the physical LED ring.
 class LedRingGlow extends StatefulWidget {
-  const LedRingGlow({super.key, required this.spec, required this.diameter, this.boost = 0});
+  const LedRingGlow(
+      {super.key, required this.spec, required this.diameter, this.boost = 0});
   final LedSpec spec;
   final double diameter;
 
@@ -53,8 +63,10 @@ class LedRingGlow extends StatefulWidget {
   State<LedRingGlow> createState() => _LedRingGlowState();
 }
 
-class _LedRingGlowState extends State<LedRingGlow> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: widget.spec.period);
+class _LedRingGlowState extends State<LedRingGlow>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: widget.spec.period);
 
   @override
   void didChangeDependencies() {
@@ -133,7 +145,8 @@ class LedRingPainter extends CustomPainter {
       case LedPattern.fastPulse:
         return 0.35 + 0.65 * math.pow(math.sin(t * math.pi), 2).toDouble();
       case LedPattern.doublePulse:
-        double bump(double c) => math.exp(-math.pow((t - c) / 0.07, 2).toDouble());
+        double bump(double c) =>
+            math.exp(-math.pow((t - c) / 0.07, 2).toDouble());
         return 0.5 + 0.5 * math.max(bump(0.2), bump(0.42));
       case LedPattern.fill:
         return 0.65 + 0.35 * t;
@@ -158,7 +171,8 @@ class LedRingPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke * 3.2
       ..color = color.withValues(alpha: (0.30 * k).clamp(0, 1))
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, (18 + 10 * k).clamp(18, 28));
+      ..maskFilter =
+          MaskFilter.blur(BlurStyle.normal, (18 + 10 * k).clamp(18, 28));
     // Tight glow.
     final glow = Paint()
       ..blendMode = BlendMode.plus
@@ -170,7 +184,8 @@ class LedRingPainter extends CustomPainter {
     final core = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
-      ..color = Color.lerp(color, Colors.white, 0.25)!.withValues(alpha: (0.7 + 0.3 * k).clamp(0, 1));
+      ..color = Color.lerp(color, Colors.white, 0.25)!
+          .withValues(alpha: (0.7 + 0.3 * k).clamp(0, 1));
 
     switch (pattern) {
       case LedPattern.sweep:
@@ -207,7 +222,10 @@ class LedRingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(LedRingPainter old) =>
-      old.t != t || old.color != color || old.pattern != pattern || old.boost != boost;
+      old.t != t ||
+      old.color != color ||
+      old.pattern != pattern ||
+      old.boost != boost;
 }
 
 /// The product cut-out on the dark background: radial mint glow behind,
@@ -230,7 +248,8 @@ class ProductHero extends StatelessWidget {
   Widget build(BuildContext context) {
     final h = width / AetherCoreImage.aspect;
     final ringD = width * AetherCoreImage.ringDiameter;
-    final ringC = Offset(width * AetherCoreImage.ringCenter.dx, h * AetherCoreImage.ringCenter.dy);
+    final ringC = Offset(width * AetherCoreImage.ringCenter.dx,
+        h * AetherCoreImage.ringCenter.dy);
     final spec = LedSpec.of(state);
 
     return Semantics(
@@ -251,7 +270,10 @@ class ProductHero extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: RadialGradient(
-                    colors: [spec.color.withValues(alpha: 0.12), spec.color.withValues(alpha: 0)],
+                    colors: [
+                      spec.color.withValues(alpha: 0.12),
+                      spec.color.withValues(alpha: 0)
+                    ],
                     stops: const [0, 0.7],
                   ),
                 ),
@@ -265,8 +287,10 @@ class ProductHero extends StatelessWidget {
               height: h * 0.05,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.elliptical(width, h * 0.05)),
-                  gradient: const RadialGradient(colors: [Color(0x99000000), Color(0x00000000)]),
+                  borderRadius:
+                      BorderRadius.all(Radius.elliptical(width, h * 0.05)),
+                  gradient: const RadialGradient(
+                      colors: [Color(0x99000000), Color(0x00000000)]),
                 ),
               ),
             ),
@@ -299,7 +323,8 @@ class ProductHero extends StatelessWidget {
                 ),
               ),
             Positioned.fill(
-              child: Image.asset(AetherCoreImage.asset, fit: BoxFit.fill, filterQuality: FilterQuality.medium),
+              child: Image.asset(AetherCoreImage.asset,
+                  fit: BoxFit.fill, filterQuality: FilterQuality.medium),
             ),
             Positioned(
               left: ringC.dx - (ringD + ringD * 1.6) / 2,

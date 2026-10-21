@@ -68,7 +68,8 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  late final PageController _pc = PageController(initialPage: widget.initialPage);
+  late final PageController _pc =
+      PageController(initialPage: widget.initialPage);
   late int _page = widget.initialPage;
   bool _zoom = false;
 
@@ -78,11 +79,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
-  void _go(int p) => _pc.animateToPage(p, duration: context.motion(AppMotion.slow), curve: AppMotion.curve);
+  void _go(int p) => _pc.animateToPage(p,
+      duration: context.motion(AppMotion.slow), curve: AppMotion.curve);
 
   Future<void> _connect() async {
     setState(() => _zoom = true);
-    await Future<void>.delayed(context.motion(const Duration(milliseconds: 420)));
+    await Future<void>.delayed(
+        context.motion(const Duration(milliseconds: 420)));
     if (!mounted) return;
     context.go(Routes.permissions);
   }
@@ -129,14 +132,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   top: pad.top + 18,
                   child: Row(
                     children: [
-                      const Icon(AppIcons.bolt, color: AppColors.mint, size: 20),
+                      const Icon(AppIcons.bolt,
+                          color: AppColors.mint, size: 20),
                       const SizedBox(width: 10),
                       Text.rich(
                         TextSpan(
                           text: AppBrand.wordmark,
-                          children: [TextSpan(text: '.', style: AppType.body(15, weight: FontWeight.w800, color: AppColors.mint))],
+                          children: [
+                            TextSpan(
+                                text: '.',
+                                style: AppType.body(15,
+                                    weight: FontWeight.w800,
+                                    color: AppColors.mint))
+                          ],
                         ),
-                        style: AppType.body(15, weight: FontWeight.w800, spacing: 2),
+                        style: AppType.body(15,
+                            weight: FontWeight.w800, spacing: 2),
                       ),
                       const Spacer(),
                       _Dots(count: _slides.length, index: _page),
@@ -154,7 +165,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ? PagerControl(
                             key: const ValueKey('pager'),
                             height: control,
-                            label: _page == 0 ? 'SWIPE OR TAP NEXT' : 'ALMOST THERE',
+                            label: _page == 0
+                                ? 'SWIPE OR TAP NEXT'
+                                : 'ALMOST THERE',
                             onBack: _page == 0 ? null : () => _go(_page - 1),
                             onNext: () => _go(_page + 1),
                           )
@@ -193,7 +206,9 @@ class _Dots extends StatelessWidget {
                 height: 6,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: i == index ? AppColors.mint : Colors.white.withValues(alpha: 0.25),
+                  color: i == index
+                      ? AppColors.mint
+                      : Colors.white.withValues(alpha: 0.25),
                 ),
               ),
           ],
@@ -273,15 +288,21 @@ class _SlideView extends StatelessWidget {
                   children: [
                     Icon(slide.badgeIcon, size: 13, color: AppColors.mint),
                     const SizedBox(width: 7),
-                    Text(slide.badge, style: AppType.body(12, color: AppColors.textPrimary)),
+                    Text(slide.badge,
+                        style: AppType.body(12, color: AppColors.textPrimary)),
                   ],
                 ),
               ),
               const SizedBox(height: 14),
-              Text(slide.line1, style: AppType.display(headline, weight: FontWeight.w400, height: 1.04)),
+              Text(slide.line1,
+                  style: AppType.display(headline,
+                      weight: FontWeight.w400, height: 1.04)),
               Text(
                 slide.line2,
-                style: AppType.display(headline, weight: FontWeight.w400, color: AppColors.textSecondary, height: 1.04),
+                style: AppType.display(headline,
+                    weight: FontWeight.w400,
+                    color: AppColors.textSecondary,
+                    height: 1.04),
               ),
             ],
           ),
@@ -315,7 +336,8 @@ class _InfoCard extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
-              decoration: const BoxDecoration(color: Color(0xFF16181A), shape: BoxShape.circle),
+              decoration: const BoxDecoration(
+                  color: Color(0xFF16181A), shape: BoxShape.circle),
               child: Icon(slide.cardIcon, color: AppColors.mint, size: 18),
             ),
             const SizedBox(width: 12),
@@ -324,11 +346,15 @@ class _InfoCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(slide.cardTitle, style: AppType.body(14, weight: FontWeight.w600), maxLines: 1),
+                  Text(slide.cardTitle,
+                      style: AppType.body(14, weight: FontWeight.w600),
+                      maxLines: 1),
                   const SizedBox(height: 2),
                   Text(
                     slide.cardSubtitle,
-                    style: AppType.body(12, weight: FontWeight.w500, color: AppColors.textSecondary),
+                    style: AppType.body(12,
+                        weight: FontWeight.w500,
+                        color: AppColors.textSecondary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -342,7 +368,11 @@ class _InfoCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.mint,
                 shape: BoxShape.circle,
-                boxShadow: [BoxShadow(color: AppColors.mint.withValues(alpha: 0.5), blurRadius: 8)],
+                boxShadow: [
+                  BoxShadow(
+                      color: AppColors.mint.withValues(alpha: 0.5),
+                      blurRadius: 8)
+                ],
               ),
             ),
           ],
@@ -360,8 +390,10 @@ class _FloatingProduct extends StatefulWidget {
   State<_FloatingProduct> createState() => _FloatingProductState();
 }
 
-class _FloatingProductState extends State<_FloatingProduct> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(seconds: 5));
+class _FloatingProductState extends State<_FloatingProduct>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: const Duration(seconds: 5));
 
   @override
   void didChangeDependencies() {
@@ -383,7 +415,8 @@ class _FloatingProductState extends State<_FloatingProduct> with SingleTickerPro
         offset: Offset(0, math.sin(_c.value * 2 * math.pi) * 6),
         child: child,
       ),
-      child: ProductHero(width: widget.width, state: NodeState.idle, reflection: false),
+      child: ProductHero(
+          width: widget.width, state: NodeState.idle, reflection: false),
     );
   }
 }

@@ -24,10 +24,14 @@ extension EnergyModeLabel on EnergyMode {
       };
 
   String get detail => switch (this) {
-        EnergyMode.selfConsumption => 'Use your own solar first, store the rest.',
-        EnergyMode.backupPriority => 'Keep the Core full and ready for outages.',
-        EnergyMode.gridExport => 'Sell surplus to the grid as soon as it is produced.',
-        EnergyMode.timeOfUse => 'Charge off-peak, power the home at peak tariffs.',
+        EnergyMode.selfConsumption =>
+          'Use your own solar first, store the rest.',
+        EnergyMode.backupPriority =>
+          'Keep the Core full and ready for outages.',
+        EnergyMode.gridExport =>
+          'Sell surplus to the grid as soon as it is produced.',
+        EnergyMode.timeOfUse =>
+          'Charge off-peak, power the home at peak tariffs.',
       };
 }
 
@@ -153,17 +157,21 @@ class DailyStats {
   final double importKwh;
   final double exportKwh;
 
-  double get selfConsumptionPct =>
-      solarKwh <= 0 ? 0 : ((solarKwh - exportKwh) / solarKwh * 100).clamp(0, 100);
+  double get selfConsumptionPct => solarKwh <= 0
+      ? 0
+      : ((solarKwh - exportKwh) / solarKwh * 100).clamp(0, 100);
   double get selfSufficiencyPct =>
       homeKwh <= 0 ? 0 : ((homeKwh - importKwh) / homeKwh * 100).clamp(0, 100);
   bool get independent => homeKwh > 0 && importKwh <= homeKwh * 0.05;
 
   /// Grid emission factor 0.42 kg CO₂/kWh (EU average, see DECISIONS.md).
-  double get co2KgAvoided => (solarKwh - exportKwh).clamp(0, double.infinity) * 0.42 + exportKwh * 0.42;
+  double get co2KgAvoided =>
+      (solarKwh - exportKwh).clamp(0, double.infinity) * 0.42 +
+      exportKwh * 0.42;
 
   /// Avoided import at 0.28/kWh + export at 0.08/kWh.
-  double get moneySaved => (homeKwh - importKwh).clamp(0, double.infinity) * 0.28 + exportKwh * 0.08;
+  double get moneySaved =>
+      (homeKwh - importKwh).clamp(0, double.infinity) * 0.28 + exportKwh * 0.08;
 }
 
 enum InverterStatus { producing, idle, fault }
@@ -192,7 +200,15 @@ class MicroInverter {
   final InverterStatus status;
 }
 
-enum AlertType { outage, restored, lowReserve, firmware, overTemp, stormGuard, member }
+enum AlertType {
+  outage,
+  restored,
+  lowReserve,
+  firmware,
+  overTemp,
+  stormGuard,
+  member
+}
 
 @immutable
 class AppAlert {
@@ -212,7 +228,11 @@ class AppAlert {
 
 @immutable
 class Member {
-  const Member({required this.id, required this.name, required this.role, this.you = false});
+  const Member(
+      {required this.id,
+      required this.name,
+      required this.role,
+      this.you = false});
   final String id;
   final String name;
   final Role role;
@@ -221,7 +241,8 @@ class Member {
 
 @immutable
 class DiscoveredNode {
-  const DiscoveredNode({required this.id, required this.mesh, required this.signalPercent});
+  const DiscoveredNode(
+      {required this.id, required this.mesh, required this.signalPercent});
   final String id;
   final String mesh;
   final int signalPercent;
@@ -241,7 +262,13 @@ class PairingResult {
   final String keyFingerprint;
 }
 
-enum CommissionStep { registeringKey, securingLink, syncingBridge, checkingFirmware, done }
+enum CommissionStep {
+  registeringKey,
+  securingLink,
+  syncingBridge,
+  checkingFirmware,
+  done
+}
 
 extension CommissionStepLabel on CommissionStep {
   String get label => switch (this) {
@@ -263,7 +290,15 @@ class CommissionProgress {
 }
 
 /// Events pushed by the node (become alerts / notifications / toasts).
-enum NodeEventType { outage, restored, lowReserve, firmwareAvailable, offline, online, stormGuard }
+enum NodeEventType {
+  outage,
+  restored,
+  lowReserve,
+  firmwareAvailable,
+  offline,
+  online,
+  stormGuard
+}
 
 @immutable
 class NodeEvent {

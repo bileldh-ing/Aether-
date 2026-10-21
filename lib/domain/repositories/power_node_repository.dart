@@ -5,7 +5,8 @@ import '../entities/entities.dart';
 abstract interface class PowerNodeRepository {
   // Discovery & provisioning (BLE).
   Stream<DiscoveredNode> scan({Duration timeout});
-  Future<PairingResult> pair(DiscoveredNode node, {required String ownerName, required String publicKey});
+  Future<PairingResult> pair(DiscoveredNode node,
+      {required String ownerName, required String publicKey});
   Stream<CommissionProgress> commission();
 
   // Live link.

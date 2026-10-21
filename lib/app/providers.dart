@@ -22,14 +22,16 @@ final sharedPrefsProvider = Provider<SharedPreferences>(
   (ref) => throw UnimplementedError('Override sharedPrefsProvider in main()'),
 );
 
-final secureStoreProvider = Provider<SecureStore>((ref) => const PlatformSecureStore());
+final secureStoreProvider =
+    Provider<SecureStore>((ref) => const PlatformSecureStore());
 
 final securityServiceProvider = Provider<SecurityService>(
   (ref) => SecurityService(ref.watch(secureStoreProvider)),
 );
 
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  final s = NotificationService(enabled: ref.watch(appConfigProvider).enableNotifications);
+  final s = NotificationService(
+      enabled: ref.watch(appConfigProvider).enableNotifications);
   unawaited(s.init());
   return s;
 });
@@ -38,7 +40,8 @@ final powerNodeRepositoryProvider = Provider<PowerNodeRepository>((ref) {
   final config = ref.watch(appConfigProvider);
   if (!config.useMockDevice) {
     // Real node: compose BleProvisioningSource + LiveLinkSource here.
-    throw UnimplementedError('Live repository: see README › Swapping in real hardware.');
+    throw UnimplementedError(
+        'Live repository: see README › Swapping in real hardware.');
   }
   final mock = MockPowerNodeSource();
   ref.onDispose(mock.dispose);
@@ -105,7 +108,8 @@ class ToastController extends Notifier<Toast?> {
   }
 }
 
-final toastProvider = NotifierProvider<ToastController, Toast?>(ToastController.new);
+final toastProvider =
+    NotifierProvider<ToastController, Toast?>(ToastController.new);
 
 // ───────────────────────────── settings
 
@@ -143,7 +147,12 @@ class AppSettings {
   final bool notifyFirmware;
   final List<Member> members;
 
-  String get currencySymbol => switch (currency) { 'USD' => r'$', 'TND' => 'DT ', 'GBP' => '£', _ => '€' };
+  String get currencySymbol => switch (currency) {
+        'USD' => r'$',
+        'TND' => 'DT ',
+        'GBP' => '£',
+        _ => '€'
+      };
 
   AppSettings copyWith({
     bool? paired,
@@ -184,7 +193,8 @@ class SettingsController extends Notifier<AppSettings> {
     final p = ref.watch(sharedPrefsProvider);
     final s = AppSettings(
       paired: p.getBool('paired') ?? false,
-      mode: EnergyMode.values[(p.getInt('mode') ?? 0).clamp(0, EnergyMode.values.length - 1)],
+      mode: EnergyMode.values[
+          (p.getInt('mode') ?? 0).clamp(0, EnergyMode.values.length - 1)],
       reserve: p.getInt('reserve') ?? 20,
       stormGuard: p.getBool('stormGuard') ?? false,
       autonomy: p.getBool('autonomy') ?? true,
@@ -228,7 +238,9 @@ class SettingsController extends Notifier<AppSettings> {
     state = state.copyWith(autonomy: v);
     await _repo.setAutonomy(v);
     await _p.setBool('autonomy', v);
-    ref.read(toastProvider.notifier).show(v ? Copy.autonomyActive : Copy.autonomyPaused);
+    ref
+        .read(toastProvider.notifier)
+        .show(v ? Copy.autonomyActive : Copy.autonomyPaused);
   }
 
   Future<void> setBiometric(bool v) async {
@@ -242,7 +254,10 @@ class SettingsController extends Notifier<AppSettings> {
   }
 
   void setNotify({bool? outage, bool? lowReserve, bool? firmware}) {
-    state = state.copyWith(notifyOutage: outage, notifyLowReserve: lowReserve, notifyFirmware: firmware);
+    state = state.copyWith(
+        notifyOutage: outage,
+        notifyLowReserve: lowReserve,
+        notifyFirmware: firmware);
   }
 
   void setLocalAuthOnly(bool v) => state = state.copyWith(localAuthOnly: v);
@@ -256,7 +271,8 @@ class SettingsController extends Notifier<AppSettings> {
 
   void setRole(String id, Role role) {
     state = state.copyWith(members: [
-      for (final m in state.members) m.id == id && !m.you ? Member(id: m.id, name: m.name, role: role) : m,
+      for (final m in state.members)
+        m.id == id && !m.you ? Member(id: m.id, name: m.name, role: role) : m,
     ]);
   }
 
@@ -266,7 +282,8 @@ class SettingsController extends Notifier<AppSettings> {
   }
 }
 
-final settingsProvider = NotifierProvider<SettingsController, AppSettings>(SettingsController.new);
+final settingsProvider =
+    NotifierProvider<SettingsController, AppSettings>(SettingsController.new);
 
 // ───────────────────────────── alerts (events → alerts, push, toasts)
 
@@ -307,7 +324,12 @@ class AlertsController extends Notifier<AlertsState> {
   void _add(AlertType type, String title, String detail) {
     state = AlertsState(
       items: [
-        AppAlert(id: 'a${_seq++}', type: type, title: title, detail: detail, at: DateTime.now()),
+        AppAlert(
+            id: 'a${_seq++}',
+            type: type,
+            title: title,
+            detail: detail,
+            at: DateTime.now()),
         ...state.items,
       ],
       unread: true,
@@ -321,27 +343,38 @@ class AlertsController extends Notifier<AlertsState> {
     switch (e.type) {
       case NodeEventType.outage:
         final rt = Fmt.hours(e.runtimeH ?? 0);
-        _add(AlertType.outage, 'Grid outage', 'Running on stored energy · about $rt left.');
-        toast.show('Island mode · about $rt of backup', tone: ToastTone.warning);
-        if (settings.notifyOutage) unawaited(push.show('Grid outage detected', Copy.outageBody(rt)));
+        _add(AlertType.outage, 'Grid outage',
+            'Running on stored energy · about $rt left.');
+        toast.show('Island mode · about $rt of backup',
+            tone: ToastTone.warning);
+        if (settings.notifyOutage)
+          unawaited(push.show('Grid outage detected', Copy.outageBody(rt)));
       case NodeEventType.restored:
-        _add(AlertType.restored, 'Grid restored', 'Your Core is back on the grid and recharging.');
+        _add(AlertType.restored, 'Grid restored',
+            'Your Core is back on the grid and recharging.');
         toast.show(Copy.gridRestored, tone: ToastTone.success);
       case NodeEventType.lowReserve:
-        _add(AlertType.lowReserve, 'Low reserve', 'Stored energy fell below your ${settings.reserve}% backup reserve.');
-        toast.show('Low reserve · below ${settings.reserve}%', tone: ToastTone.warning);
+        _add(AlertType.lowReserve, 'Low reserve',
+            'Stored energy fell below your ${settings.reserve}% backup reserve.');
+        toast.show('Low reserve · below ${settings.reserve}%',
+            tone: ToastTone.warning);
         if (settings.notifyLowReserve) {
-          unawaited(push.show('Low reserve', 'Your Power Core is below the ${settings.reserve}% backup reserve.'));
+          unawaited(push.show('Low reserve',
+              'Your Power Core is below the ${settings.reserve}% backup reserve.'));
         }
       case NodeEventType.firmwareAvailable:
-        _add(AlertType.firmware, 'Firmware available', '${MockPowerNodeSource.firmwareNext} is ready to install.');
+        _add(AlertType.firmware, 'Firmware available',
+            '${MockPowerNodeSource.firmwareNext} is ready to install.');
         if (settings.notifyFirmware) {
-          unawaited(push.show('Update available', 'Firmware ${MockPowerNodeSource.firmwareNext} is ready for your Power Core.'));
+          unawaited(push.show('Update available',
+              'Firmware ${MockPowerNodeSource.firmwareNext} is ready for your Power Core.'));
         }
       case NodeEventType.stormGuard:
-        _add(AlertType.stormGuard, 'Storm Guard active', 'Reserve raised to 100% ahead of bad weather.');
+        _add(AlertType.stormGuard, 'Storm Guard active',
+            'Reserve raised to 100% ahead of bad weather.');
       case NodeEventType.offline:
-        toast.show('Power Core offline · showing last-known data', tone: ToastTone.warning);
+        toast.show('Power Core offline · showing last-known data',
+            tone: ToastTone.warning);
       case NodeEventType.online:
         toast.show('Power Core back online', tone: ToastTone.success);
     }
@@ -349,11 +382,13 @@ class AlertsController extends Notifier<AlertsState> {
 
   void markRead() => state = AlertsState(items: state.items);
 
-  void dismiss(String id) =>
-      state = AlertsState(items: state.items.where((a) => a.id != id).toList(), unread: state.unread);
+  void dismiss(String id) => state = AlertsState(
+      items: state.items.where((a) => a.id != id).toList(),
+      unread: state.unread);
 }
 
-final alertsProvider = NotifierProvider<AlertsController, AlertsState>(AlertsController.new);
+final alertsProvider =
+    NotifierProvider<AlertsController, AlertsState>(AlertsController.new);
 
 // ───────────────────────────── firmware
 
@@ -363,13 +398,17 @@ class FirmwareController extends Notifier<FirmwareStatus> {
   @override
   FirmwareStatus build() {
     ref.onDispose(() => _sub?.cancel());
-    return FirmwareStatus(current: ref.read(powerNodeRepositoryProvider).node.firmware);
+    return FirmwareStatus(
+        current: ref.read(powerNodeRepositoryProvider).node.firmware);
   }
 
   Future<void> check() async {
     final s = await ref.read(powerNodeRepositoryProvider).checkFirmware();
     state = s;
-    if (s.available == null) ref.read(toastProvider.notifier).show('Firmware ${s.current} is up to date');
+    if (s.available == null)
+      ref
+          .read(toastProvider.notifier)
+          .show('Firmware ${s.current} is up to date');
   }
 
   void install() {
@@ -377,10 +416,13 @@ class FirmwareController extends Notifier<FirmwareStatus> {
     _sub = ref.read(powerNodeRepositoryProvider).installFirmware().listen((s) {
       state = s;
       if (s.phase == FirmwarePhase.done) {
-        ref.read(toastProvider.notifier).show(Copy.updateInstalled, tone: ToastTone.success);
+        ref
+            .read(toastProvider.notifier)
+            .show(Copy.updateInstalled, tone: ToastTone.success);
       }
     });
   }
 }
 
-final firmwareProvider = NotifierProvider<FirmwareController, FirmwareStatus>(FirmwareController.new);
+final firmwareProvider = NotifierProvider<FirmwareController, FirmwareStatus>(
+    FirmwareController.new);

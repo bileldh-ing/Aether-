@@ -38,7 +38,8 @@ class _AnimatedNumberState extends State<AnimatedNumber> {
     final first = _from == 0 && widget.countUp;
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: _from, end: widget.value),
-      duration: context.motion(first ? const Duration(milliseconds: 1100) : widget.duration),
+      duration: context
+          .motion(first ? const Duration(milliseconds: 1100) : widget.duration),
       curve: AppMotion.curve,
       builder: (context, v, _) => Text(
         widget.format?.call(v) ?? v.round().toString(),

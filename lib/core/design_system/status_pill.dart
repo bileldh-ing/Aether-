@@ -6,7 +6,11 @@ import 'typography.dart';
 
 /// `● GRID ONLINE` pill with a slow 2.4 s breathing dot.
 class StatusPill extends StatefulWidget {
-  const StatusPill({super.key, required this.label, this.color = AppColors.mint, this.breathe = true});
+  const StatusPill(
+      {super.key,
+      required this.label,
+      this.color = AppColors.mint,
+      this.breathe = true});
   final String label;
   final Color color;
   final bool breathe;
@@ -15,8 +19,10 @@ class StatusPill extends StatefulWidget {
   State<StatusPill> createState() => _StatusPillState();
 }
 
-class _StatusPillState extends State<StatusPill> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: AppMotion.breathe);
+class _StatusPillState extends State<StatusPill>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: AppMotion.breathe);
 
   @override
   void didChangeDependencies() {
@@ -72,7 +78,9 @@ class _StatusPillState extends State<StatusPill> with SingleTickerProviderStateM
                     color: widget.color.withValues(alpha: 0.55 + 0.45 * t),
                     shape: BoxShape.circle,
                     boxShadow: [
-                      BoxShadow(color: widget.color.withValues(alpha: 0.5 * t), blurRadius: 6 + 4 * t),
+                      BoxShadow(
+                          color: widget.color.withValues(alpha: 0.5 * t),
+                          blurRadius: 6 + 4 * t),
                     ],
                   ),
                 );
@@ -84,7 +92,8 @@ class _StatusPillState extends State<StatusPill> with SingleTickerProviderStateM
               child: Text(
                 widget.label,
                 key: ValueKey(widget.label),
-                style: AppType.micro(color: AppColors.textPrimary, size: 10.5, spacing: 1.2),
+                style: AppType.micro(
+                    color: AppColors.textPrimary, size: 10.5, spacing: 1.2),
               ),
             ),
           ],

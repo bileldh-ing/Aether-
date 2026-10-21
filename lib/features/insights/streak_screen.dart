@@ -15,20 +15,29 @@ class StreakScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final history = ref.watch(historyProvider);
     final streak = ref.watch(streakProvider);
-    final byDay = {for (final d in history) DateTime(d.date.year, d.date.month, d.date.day): d};
+    final byDay = {
+      for (final d in history)
+        DateTime(d.date.year, d.date.month, d.date.day): d
+    };
     final now = history.isEmpty ? DateTime.now() : history.last.date;
-    final months = [for (var i = 2; i >= 0; i--) DateTime(now.year, now.month - i)];
+    final months = [
+      for (var i = 2; i >= 0; i--) DateTime(now.year, now.month - i)
+    ];
     final independentCount = history.where((d) => d.independent).length;
 
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(AppSpace.screenH, 8, AppSpace.screenH, 32),
+          padding: const EdgeInsets.fromLTRB(
+              AppSpace.screenH, 8, AppSpace.screenH, 32),
           children: [
             Row(
               children: [
-                IconCircleButton(icon: AppIcons.back, semanticLabel: 'Back', onTap: () => context.pop()),
+                IconCircleButton(
+                    icon: AppIcons.back,
+                    semanticLabel: 'Back',
+                    onTap: () => context.pop()),
                 const Spacer(),
                 const StatusPill(label: 'INDEPENDENCE'),
                 const Spacer(),
@@ -40,12 +49,16 @@ class StreakScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                AnimatedNumber(value: streak.toDouble(), style: AppType.display(64, weight: FontWeight.w300, tabular: true)),
+                AnimatedNumber(
+                    value: streak.toDouble(),
+                    style: AppType.display(64,
+                        weight: FontWeight.w300, tabular: true)),
                 const SizedBox(width: 10),
                 Text('DAYS', style: AppType.micro(size: 12)),
               ],
             ),
-            Text('Current streak of total energy independence', style: AppType.body(13.5, color: AppColors.textSecondary)),
+            Text('Current streak of total energy independence',
+                style: AppType.body(13.5, color: AppColors.textSecondary)),
             const SizedBox(height: 6),
             Text(
               '$independentCount of the last ${history.length} days ran on 5% grid import or less.',
@@ -79,12 +92,17 @@ class _Month extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(DateFormat('MMMM yyyy').format(month), style: AppType.body(14, weight: FontWeight.w600)),
+          Text(DateFormat('MMMM yyyy').format(month),
+              style: AppType.body(14, weight: FontWeight.w600)),
           const SizedBox(height: 12),
           Row(
             children: [
               for (final d in const ['M', 'T', 'W', 'T', 'F', 'S', 'S'])
-                Expanded(child: Center(child: Text(d, style: AppType.body(10.5, color: AppColors.textTertiary)))),
+                Expanded(
+                    child: Center(
+                        child: Text(d,
+                            style: AppType.body(10.5,
+                                color: AppColors.textTertiary)))),
             ],
           ),
           const SizedBox(height: 8),
@@ -96,7 +114,8 @@ class _Month extends StatelessWidget {
             crossAxisSpacing: 6,
             children: [
               for (var i = 0; i < lead; i++) const SizedBox.shrink(),
-              for (var d = 1; d <= daysIn; d++) _cell(DateTime(month.year, month.month, d)),
+              for (var d = 1; d <= daysIn; d++)
+                _cell(DateTime(month.year, month.month, d)),
             ],
           ),
         ],
@@ -123,11 +142,14 @@ class _Month extends StatelessWidget {
       fg = AppColors.textSecondary;
     }
     return Semantics(
-      label: '${DateFormat('d MMMM').format(day)}${s == null ? '' : s.independent ? ', independent' : ', used grid'}',
+      label:
+          '${DateFormat('d MMMM').format(day)}${s == null ? '' : s.independent ? ', independent' : ', used grid'}',
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(10)),
-        child: Text('${day.day}', style: AppType.body(11.5, weight: FontWeight.w600, color: fg)),
+        decoration:
+            BoxDecoration(color: bg, borderRadius: BorderRadius.circular(10)),
+        child: Text('${day.day}',
+            style: AppType.body(11.5, weight: FontWeight.w600, color: fg)),
       ),
     );
   }

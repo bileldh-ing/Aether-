@@ -42,7 +42,8 @@ ThemeData buildAetherTheme() {
       trackHeight: 4,
       showValueIndicator: ShowValueIndicator.never,
     ),
-    textSelectionTheme: const TextSelectionThemeData(cursorColor: AppColors.mint),
+    textSelectionTheme:
+        const TextSelectionThemeData(cursorColor: AppColors.mint),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),

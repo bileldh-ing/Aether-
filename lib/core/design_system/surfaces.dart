@@ -172,7 +172,8 @@ class IconCircleButton extends StatelessWidget {
 
 /// Full-width white CTA pill (60 px).
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({super.key, required this.label, required this.onTap, this.height = 60});
+  const PrimaryButton(
+      {super.key, required this.label, required this.onTap, this.height = 60});
   final String label;
   final VoidCallback? onTap;
   final double height;
@@ -194,7 +195,9 @@ class PrimaryButton extends StatelessWidget {
               color: AppColors.ctaWhite,
               borderRadius: BorderRadius.circular(AppRadii.pill),
             ),
-            child: Text(label, style: AppType.body(15, weight: FontWeight.w600, color: AppColors.ctaText)),
+            child: Text(label,
+                style: AppType.body(15,
+                    weight: FontWeight.w600, color: AppColors.ctaText)),
           ),
         ),
       ),
@@ -204,7 +207,12 @@ class PrimaryButton extends StatelessWidget {
 
 /// Quiet secondary pill.
 class GhostButton extends StatelessWidget {
-  const GhostButton({super.key, required this.label, required this.onTap, this.height = 52, this.color});
+  const GhostButton(
+      {super.key,
+      required this.label,
+      required this.onTap,
+      this.height = 52,
+      this.color});
   final String label;
   final VoidCallback? onTap;
   final double height;
@@ -225,7 +233,10 @@ class GhostButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadii.pill),
             border: Border.all(color: AppColors.border),
           ),
-          child: Text(label, style: AppType.body(14, weight: FontWeight.w600, color: color ?? AppColors.textPrimary)),
+          child: Text(label,
+              style: AppType.body(14,
+                  weight: FontWeight.w600,
+                  color: color ?? AppColors.textPrimary)),
         ),
       ),
     );
@@ -234,7 +245,12 @@ class GhostButton extends StatelessWidget {
 
 /// Small tinted square for list-tile leading icons.
 class TintedIcon extends StatelessWidget {
-  const TintedIcon({super.key, required this.icon, this.color = AppColors.mint, this.size = 40, this.circle = false});
+  const TintedIcon(
+      {super.key,
+      required this.icon,
+      this.color = AppColors.mint,
+      this.size = 40,
+      this.circle = false});
   final IconData icon;
   final Color color;
   final double size;
@@ -257,7 +273,8 @@ class TintedIcon extends StatelessWidget {
 
 /// Dark circle holding an accent icon (dashboard stat cards).
 class DarkIconCircle extends StatelessWidget {
-  const DarkIconCircle({super.key, required this.icon, required this.color, this.size = 40});
+  const DarkIconCircle(
+      {super.key, required this.icon, required this.color, this.size = 40});
   final IconData icon;
   final Color color;
   final double size;
@@ -276,12 +293,14 @@ class DarkIconCircle extends StatelessWidget {
 }
 
 class MicroLabel extends StatelessWidget {
-  const MicroLabel(this.text, {super.key, this.color = AppColors.textSecondary, this.size = 10.5});
+  const MicroLabel(this.text,
+      {super.key, this.color = AppColors.textSecondary, this.size = 10.5});
   final String text;
   final Color color;
   final double size;
   @override
-  Widget build(BuildContext context) => Text(text, style: AppType.micro(color: color, size: size));
+  Widget build(BuildContext context) =>
+      Text(text, style: AppType.micro(color: color, size: size));
 }
 
 class SectionHeader extends StatelessWidget {
@@ -302,7 +321,11 @@ class SectionHeader extends StatelessWidget {
 
 /// Pill-style switch matching the design language.
 class AetherSwitch extends StatelessWidget {
-  const AetherSwitch({super.key, required this.value, required this.onChanged, this.semanticLabel});
+  const AetherSwitch(
+      {super.key,
+      required this.value,
+      required this.onChanged,
+      this.semanticLabel});
   final bool value;
   final ValueChanged<bool>? onChanged;
   final String? semanticLabel;
@@ -323,7 +346,8 @@ class AetherSwitch extends StatelessWidget {
           decoration: BoxDecoration(
             color: value ? AppColors.mint : AppColors.surfaceHigh,
             borderRadius: BorderRadius.circular(AppRadii.pill),
-            border: Border.all(color: value ? Colors.transparent : AppColors.glassBorder),
+            border: Border.all(
+                color: value ? Colors.transparent : AppColors.glassBorder),
           ),
           child: AnimatedAlign(
             duration: AppMotion.fast,

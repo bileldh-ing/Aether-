@@ -23,11 +23,15 @@ class EnergyFlowScreen extends ConsumerWidget {
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(AppSpace.screenH, 8, AppSpace.screenH, 32),
+          padding: const EdgeInsets.fromLTRB(
+              AppSpace.screenH, 8, AppSpace.screenH, 32),
           children: [
             Row(
               children: [
-                IconCircleButton(icon: AppIcons.back, semanticLabel: 'Back', onTap: () => context.pop()),
+                IconCircleButton(
+                    icon: AppIcons.back,
+                    semanticLabel: 'Back',
+                    onTap: () => context.pop()),
                 const Spacer(),
                 StatusPill(label: Metrics.pillLabel(state), color: accent),
                 const Spacer(),
@@ -35,11 +39,13 @@ class EnergyFlowScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Text('Energy flow', style: AppType.display(32, weight: FontWeight.w500)),
+            Text('Energy flow',
+                style: AppType.display(32, weight: FontWeight.w500)),
             const SizedBox(height: 4),
             Text(
               s == null ? '' : _summary(s),
-              style: AppType.body(13.5, color: AppColors.textSecondary, height: 1.4),
+              style: AppType.body(13.5,
+                  color: AppColors.textSecondary, height: 1.4),
             ),
             const SizedBox(height: 24),
             if (s != null)
@@ -63,14 +69,20 @@ class EnergyFlowScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Garage Core · NEXUS-CORE-901', style: AppType.body(13.5, weight: FontWeight.w600)),
+                        Text('Garage Core · NEXUS-CORE-901',
+                            style: AppType.body(13.5, weight: FontWeight.w600)),
                         const SizedBox(height: 4),
                         Text(
-                          s == null ? '' : 'Runtime at current load ≈ ${Fmt.hours(s.estRuntimeH)}',
-                          style: AppType.body(12.5, color: AppColors.textSecondary),
+                          s == null
+                              ? ''
+                              : 'Runtime at current load ≈ ${Fmt.hours(s.estRuntimeH)}',
+                          style: AppType.body(12.5,
+                              color: AppColors.textSecondary),
                         ),
                         const SizedBox(height: 4),
-                        Text('The ring on the unit matches this colour.', style: AppType.body(12, color: AppColors.textTertiary)),
+                        Text('The ring on the unit matches this colour.',
+                            style: AppType.body(12,
+                                color: AppColors.textTertiary)),
                       ],
                     ),
                   ),
@@ -84,11 +96,16 @@ class EnergyFlowScreen extends ConsumerWidget {
   }
 
   String _summary(EnergySnapshot s) {
-    if (!s.nodeOnline) return 'The Core is offline. Showing the last reading it sent.';
-    if (!s.gridOnline) return 'Grid is down. Your home is running on solar and stored energy.';
-    if (s.gridW < -20) return 'Solar covers the house and the surplus is flowing to the grid.';
-    if (s.batteryW > 20) return 'Solar is powering the house and filling the Core.';
-    if (s.batteryW < -20) return 'The Core is powering your home from stored energy.';
+    if (!s.nodeOnline)
+      return 'The Core is offline. Showing the last reading it sent.';
+    if (!s.gridOnline)
+      return 'Grid is down. Your home is running on solar and stored energy.';
+    if (s.gridW < -20)
+      return 'Solar covers the house and the surplus is flowing to the grid.';
+    if (s.batteryW > 20)
+      return 'Solar is powering the house and filling the Core.';
+    if (s.batteryW < -20)
+      return 'The Core is powering your home from stored energy.';
     return 'Everything is balanced. The Core is standing by.';
   }
 }

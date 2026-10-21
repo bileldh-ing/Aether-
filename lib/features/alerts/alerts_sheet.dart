@@ -24,18 +24,22 @@ class _AlertsSheetState extends ConsumerState<AlertsSheet> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(alertsProvider.notifier).markRead());
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ref.read(alertsProvider.notifier).markRead());
   }
 
   @override
   Widget build(BuildContext context) {
     final items = ref.watch(alertsProvider.select((s) => s.items));
     final now = DateTime.now();
-    final today = items.where((a) => now.difference(a.at).inHours < 24 && a.at.day == now.day).toList();
+    final today = items
+        .where((a) => now.difference(a.at).inHours < 24 && a.at.day == now.day)
+        .toList();
     final earlier = items.where((a) => !today.contains(a)).toList();
 
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.78),
+      constraints:
+          BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.78),
       child: SheetFrame(
         title: 'Alerts',
         child: items.isEmpty
@@ -92,7 +96,8 @@ class _AlertRow extends ConsumerWidget {
       background: Container(
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
-        child: const Icon(AppIcons.trash, color: AppColors.textSecondary, size: 20),
+        child: const Icon(AppIcons.trash,
+            color: AppColors.textSecondary, size: 20),
       ),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
@@ -100,7 +105,8 @@ class _AlertRow extends ConsumerWidget {
           radius: AppRadii.tile,
           color: AppColors.surfaceHigh,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          semanticLabel: '${alert.title}. ${alert.detail}. ${Fmt.relative(alert.at, now)}',
+          semanticLabel:
+              '${alert.title}. ${alert.detail}. ${Fmt.relative(alert.at, now)}',
           child: Row(
             children: [
               TintedIcon(icon: icon, color: color, size: 36),
@@ -109,7 +115,8 @@ class _AlertRow extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(alert.title, style: AppType.body(14, weight: FontWeight.w600)),
+                    Text(alert.title,
+                        style: AppType.body(14, weight: FontWeight.w600)),
                     const SizedBox(height: 2),
                     Text(
                       alert.detail,
@@ -121,7 +128,8 @@ class _AlertRow extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Text(Fmt.relative(alert.at, now), style: AppType.body(11, color: AppColors.textTertiary)),
+              Text(Fmt.relative(alert.at, now),
+                  style: AppType.body(11, color: AppColors.textTertiary)),
             ],
           ),
         ),

@@ -17,7 +17,8 @@ abstract final class DayCurves {
     if (minuteOfDay < peakMin) {
       x = (minuteOfDay - sunriseMin) / (peakMin - sunriseMin) * math.pi / 2;
     } else {
-      x = math.pi / 2 + (minuteOfDay - peakMin) / (sunsetMin - peakMin) * math.pi / 2;
+      x = math.pi / 2 +
+          (minuteOfDay - peakMin) / (sunsetMin - peakMin) * math.pi / 2;
     }
     return math.pow(math.sin(x), 1.6).toDouble();
   }

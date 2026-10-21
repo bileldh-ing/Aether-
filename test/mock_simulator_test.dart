@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:aether_grid/data/sources/mock/day_curves.dart';
 import 'package:aether_grid/data/sources/mock/mock_power_node_source.dart';
 import 'package:aether_grid/domain/entities/entities.dart';
@@ -7,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 MockPowerNodeSource _sim(DateTime at) => MockPowerNodeSource(clock: () => at, autoStart: false);
 
-Future<EnergySnapshot> _latest(MockPowerNodeSource s) async {
-  final f = s.watch().skip(1).first;
+/// Advances one simulated second and returns the snapshot it produced.
+Future<EnergySnapshot> _latest(MockPowerNodeSource s) {
   s.tick();
-  return f;
+  return s.watch().first;
 }
 
 void main() {

@@ -28,10 +28,12 @@ class SwipeToConnect extends StatefulWidget {
   State<SwipeToConnect> createState() => _SwipeToConnectState();
 }
 
-class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStateMixin {
-  late final AnimationController _pos = AnimationController.unbounded(vsync: this);
-  late final AnimationController _shimmer =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 1800));
+class _SwipeToConnectState extends State<SwipeToConnect>
+    with TickerProviderStateMixin {
+  late final AnimationController _pos =
+      AnimationController.unbounded(vsync: this);
+  late final AnimationController _shimmer = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1800));
   bool _done = false;
 
   static const _pad = 8.0;
@@ -60,7 +62,8 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
       _done = true;
       Haptics.swipeComplete();
       _pos
-          .animateTo(maxDx, duration: context.motion(AppMotion.fast), curve: AppMotion.curve)
+          .animateTo(maxDx,
+              duration: context.motion(AppMotion.fast), curve: AppMotion.curve)
           .whenComplete(() {
         widget.onComplete();
         Future<void>.delayed(const Duration(milliseconds: 900), () {
@@ -105,7 +108,8 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
                     size: knob,
                     color: AppColors.ctaWhite,
                     onTap: widget.onBack,
-                    child: const Icon(AppIcons.chevronLeft, size: 18, color: AppColors.ctaText),
+                    child: const Icon(AppIcons.chevronLeft,
+                        size: 18, color: AppColors.ctaText),
                   ),
                 ),
                 // Label + shimmering chevrons.
@@ -116,7 +120,8 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
                     child: child,
                   ),
                   child: Padding(
-                    padding: EdgeInsets.only(left: thumbStart + knob + 14, right: knob + _pad + 8),
+                    padding: EdgeInsets.only(
+                        left: thumbStart + knob + 14, right: knob + _pad + 8),
                     child: Row(
                       children: [
                         Flexible(
@@ -125,7 +130,10 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             softWrap: false,
-                            style: AppType.micro(color: const Color(0xD9FFFFFF), size: 11, spacing: 1.6),
+                            style: AppType.micro(
+                                color: const Color(0xD9FFFFFF),
+                                size: 11,
+                                spacing: 1.6),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -140,7 +148,8 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
                   child: _Circle(
                     size: knob,
                     color: const Color(0x2EFFFFFF),
-                    child: const Icon(AppIcons.play, size: 16, color: Colors.white),
+                    child: const Icon(AppIcons.play,
+                        size: 16, color: Colors.white),
                   ),
                 ),
                 // Thumb.
@@ -154,7 +163,8 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
                       child: GestureDetector(
                         onHorizontalDragUpdate: (d) {
                           if (_done) return;
-                          _pos.value = (_pos.value + d.delta.dx).clamp(0, maxDx);
+                          _pos.value =
+                              (_pos.value + d.delta.dx).clamp(0, maxDx);
                         },
                         onHorizontalDragEnd: (_) => _release(maxDx),
                         child: Container(
@@ -165,12 +175,14 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.mint.withValues(alpha: 0.25 + 0.45 * p),
+                                color: AppColors.mint
+                                    .withValues(alpha: 0.25 + 0.45 * p),
                                 blurRadius: 10 + 18 * p,
                               ),
                             ],
                           ),
-                          child: const Icon(AppIcons.bolt, size: 20, color: AppColors.ctaText),
+                          child: const Icon(AppIcons.bolt,
+                              size: 20, color: AppColors.ctaText),
                         ),
                       ),
                     );
@@ -186,7 +198,11 @@ class _SwipeToConnectState extends State<SwipeToConnect> with TickerProviderStat
 }
 
 class _Circle extends StatelessWidget {
-  const _Circle({required this.size, required this.color, required this.child, this.onTap});
+  const _Circle(
+      {required this.size,
+      required this.color,
+      required this.child,
+      this.onTap});
   final double size;
   final Color color;
   final Widget child;
@@ -236,7 +252,12 @@ class _Chevrons extends StatelessWidget {
 
 /// Simple pager control for slides 1–2: white ‹ and mint › in the same track.
 class PagerControl extends StatelessWidget {
-  const PagerControl({super.key, required this.onNext, this.onBack, this.height = 64, this.label = 'NEXT'});
+  const PagerControl(
+      {super.key,
+      required this.onNext,
+      this.onBack,
+      this.height = 64,
+      this.label = 'NEXT'});
   final VoidCallback onNext;
   final VoidCallback? onBack;
   final double height;
@@ -262,13 +283,16 @@ class PagerControl extends StatelessWidget {
                 size: knob,
                 color: AppColors.ctaWhite,
                 onTap: onBack,
-                child: const Icon(AppIcons.chevronLeft, size: 18, color: AppColors.ctaText),
+                child: const Icon(AppIcons.chevronLeft,
+                    size: 18, color: AppColors.ctaText),
               ),
             ),
           ),
           Expanded(
             child: Center(
-              child: Text(label, style: AppType.micro(color: const Color(0xD9FFFFFF), size: 11, spacing: 1.6)),
+              child: Text(label,
+                  style: AppType.micro(
+                      color: const Color(0xD9FFFFFF), size: 11, spacing: 1.6)),
             ),
           ),
           Semantics(
@@ -278,7 +302,8 @@ class PagerControl extends StatelessWidget {
               size: knob,
               color: AppColors.mint,
               onTap: onNext,
-              child: const Icon(AppIcons.chevronRight, size: 18, color: AppColors.ctaText),
+              child: const Icon(AppIcons.chevronRight,
+                  size: 18, color: AppColors.ctaText),
             ),
           ),
         ],

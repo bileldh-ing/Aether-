@@ -17,7 +17,8 @@ class PlatformSecureStore implements SecureStore {
   @override
   Future<String?> read(String key) => _s.read(key: key);
   @override
-  Future<void> write(String key, String value) => _s.write(key: key, value: value);
+  Future<void> write(String key, String value) =>
+      _s.write(key: key, value: value);
   @override
   Future<void> delete(String key) => _s.delete(key: key);
 }
@@ -63,7 +64,8 @@ class SecurityService {
   /// Signs a command payload; the node verifies with the registered public key.
   Future<String> sign(String payload) async {
     final seed = await _store.read(_seedKey);
-    if (seed == null) throw StateError('No owner key. Pair the Power Core first.');
+    if (seed == null)
+      throw StateError('No owner key. Pair the Power Core first.');
     final pair = await _algo.newKeyPairFromSeed(base64Decode(seed));
     final sig = await _algo.sign(utf8.encode(payload), keyPair: pair);
     return base64Encode(sig.bytes);
@@ -76,7 +78,8 @@ class SecurityService {
 
   static String fingerprint(String pubB64) {
     final clean = pubB64.replaceAll(RegExp('[^A-Za-z0-9]'), '').toUpperCase();
-    final s = clean.length >= 16 ? clean.substring(0, 16) : clean.padRight(16, '0');
+    final s =
+        clean.length >= 16 ? clean.substring(0, 16) : clean.padRight(16, '0');
     return [for (var i = 0; i < 16; i += 4) s.substring(i, i + 4)].join(' ');
   }
 }

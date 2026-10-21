@@ -38,10 +38,12 @@ class NotificationService {
   Future<void> requestPermission() async {
     if (!_ready) return;
     await _plugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
     await _plugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(alert: true, sound: true, badge: true);
   }
 
@@ -51,7 +53,8 @@ class NotificationService {
       id: _id++,
       title: title,
       body: body,
-      notificationDetails: const NotificationDetails(android: _channel, iOS: DarwinNotificationDetails()),
+      notificationDetails: const NotificationDetails(
+          android: _channel, iOS: DarwinNotificationDetails()),
     );
   }
 }

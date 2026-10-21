@@ -49,7 +49,8 @@ class FloatingNavPill extends StatelessWidget {
             child: Container(
               width: circle,
               height: circle,
-              decoration: const BoxDecoration(color: AppColors.ctaWhite, shape: BoxShape.circle),
+              decoration: const BoxDecoration(
+                  color: AppColors.ctaWhite, shape: BoxShape.circle),
             ),
           ),
           Padding(
@@ -74,10 +75,13 @@ class FloatingNavPill extends StatelessWidget {
                         child: Center(
                           child: TweenAnimationBuilder<Color?>(
                             tween: ColorTween(
-                              end: i == index ? AppColors.ctaText : AppColors.textSecondary,
+                              end: i == index
+                                  ? AppColors.ctaText
+                                  : AppColors.textSecondary,
                             ),
                             duration: context.motion(AppMotion.fast),
-                            builder: (context, c, _) => Icon(items[i].icon, size: 21, color: c),
+                            builder: (context, c, _) =>
+                                Icon(items[i].icon, size: 21, color: c),
                           ),
                         ),
                       ),

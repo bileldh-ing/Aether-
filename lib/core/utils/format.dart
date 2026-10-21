@@ -4,8 +4,10 @@ abstract final class Fmt {
   static final _int = NumberFormat.decimalPattern('en');
 
   static String wh(double v) => _int.format(v.round());
-  static String kwh(double v) => v >= 100 ? _int.format(v.round()) : v.toStringAsFixed(1);
-  static String pct(double v, {int digits = 1}) => '${v.toStringAsFixed(digits)}%';
+  static String kwh(double v) =>
+      v >= 100 ? _int.format(v.round()) : v.toStringAsFixed(1);
+  static String pct(double v, {int digits = 1}) =>
+      '${v.toStringAsFixed(digits)}%';
 
   static String watts(double w) {
     final a = w.abs();

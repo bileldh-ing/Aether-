@@ -14,7 +14,6 @@ dependencies:
   google_fonts: any
   flutter_animate: any
   fl_chart: any
-  phosphor_flutter: any
   flutter_blue_plus: any
   mobile_scanner: any
   local_auth: any

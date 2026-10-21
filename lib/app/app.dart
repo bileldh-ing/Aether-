@@ -33,7 +33,9 @@ class AetherApp extends ConsumerWidget {
           final mq = MediaQuery.of(context);
           return MediaQuery(
             // Text scaling clamped to 1.2 so the hero layouts hold.
-            data: mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.2)),
+            data: mq.copyWith(
+                textScaler: mq.textScaler
+                    .clamp(minScaleFactor: 0.9, maxScaleFactor: 1.2)),
             child: ToastHost(child: child ?? const SizedBox.shrink()),
           );
         },

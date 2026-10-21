@@ -19,7 +19,8 @@ class StatPeriodController extends Notifier<StatPeriod> {
   void set(StatPeriod p) => state = p;
 }
 
-final statPeriodProvider = NotifierProvider<StatPeriodController, StatPeriod>(StatPeriodController.new);
+final statPeriodProvider = NotifierProvider<StatPeriodController, StatPeriod>(
+    StatPeriodController.new);
 
 /// (solar kWh, export kWh) for the chosen period.
 final periodTotalsProvider = Provider<(double, double)>((ref) {
@@ -34,9 +35,12 @@ final periodTotalsProvider = Provider<(double, double)>((ref) {
     case StatPeriod.year:
       final h = ref.watch(historyProvider);
       final year = snap.at.year;
-      final past = h.where((d) => d.date.year == year && d.date.month != snap.at.month);
-      final solar = past.fold<double>(0, (a, d) => a + d.solarKwh) + snap.monthSolarKwh;
-      final export = past.fold<double>(0, (a, d) => a + d.exportKwh) + snap.monthExportKwh;
+      final past =
+          h.where((d) => d.date.year == year && d.date.month != snap.at.month);
+      final solar =
+          past.fold<double>(0, (a, d) => a + d.solarKwh) + snap.monthSolarKwh;
+      final export =
+          past.fold<double>(0, (a, d) => a + d.exportKwh) + snap.monthExportKwh;
       return (solar, export);
   }
 });
@@ -47,7 +51,8 @@ final offlineInternetProvider = StreamProvider<bool>((ref) async* {
     final c = Connectivity();
     final first = await c.checkConnectivity();
     yield first.every((r) => r == ConnectivityResult.none);
-    yield* c.onConnectivityChanged.map((l) => l.every((r) => r == ConnectivityResult.none));
+    yield* c.onConnectivityChanged
+        .map((l) => l.every((r) => r == ConnectivityResult.none));
   } catch (_) {
     yield false;
   }

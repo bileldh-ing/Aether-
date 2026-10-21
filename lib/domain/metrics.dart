@@ -5,7 +5,8 @@ abstract final class Metrics {
   static double storedWh(double soc, double capacityWh) => soc * capacityWh;
 
   /// Solar energy used on-site ÷ solar energy produced, in %.
-  static double selfConsumptionPct({required double solarWh, required double exportWh}) {
+  static double selfConsumptionPct(
+      {required double solarWh, required double exportWh}) {
     if (solarWh <= 0) return 0;
     return ((solarWh - exportWh) / solarWh * 100).clamp(0, 100).toDouble();
   }

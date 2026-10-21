@@ -32,10 +32,14 @@ class RadarPulse extends StatefulWidget {
   State<RadarPulse> createState() => _RadarPulseState();
 }
 
-class _RadarPulseState extends State<RadarPulse> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: _period);
+class _RadarPulseState extends State<RadarPulse>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: _period);
 
-  Duration get _period => widget.fast ? const Duration(milliseconds: 1400) : const Duration(milliseconds: 4200);
+  Duration get _period => widget.fast
+      ? const Duration(milliseconds: 1400)
+      : const Duration(milliseconds: 4200);
 
   @override
   void didChangeDependencies() {
@@ -89,7 +93,10 @@ class _RadarPulseState extends State<RadarPulse> with SingleTickerProviderStateM
               ),
             ),
           ),
-          SizedBox(width: widget.inner, height: widget.inner, child: ClipOval(child: widget.child)),
+          SizedBox(
+              width: widget.inner,
+              height: widget.inner,
+              child: ClipOval(child: widget.child)),
         ],
       ),
     );
@@ -193,7 +200,8 @@ class _RadarPainter extends CustomPainter {
 
     // Success burst.
     if (burst > 0) {
-      final r = innerR + (outerR * 1.2 - innerR) * Curves.easeOutCubic.transform(burst);
+      final r = innerR +
+          (outerR * 1.2 - innerR) * Curves.easeOutCubic.transform(burst);
       canvas.drawCircle(
         c,
         r,
@@ -202,11 +210,15 @@ class _RadarPainter extends CustomPainter {
           ..strokeWidth = 3 * (1 - burst) + 0.5
           ..color = color.withValues(alpha: 0.8 * (1 - burst)),
       );
-      canvas.drawCircle(c, innerR, Paint()..color = color.withValues(alpha: 0.12 * (1 - burst)));
+      canvas.drawCircle(c, innerR,
+          Paint()..color = color.withValues(alpha: 0.12 * (1 - burst)));
     }
   }
 
   @override
   bool shouldRepaint(_RadarPainter old) =>
-      old.t != t || old.progress != progress || old.burst != burst || old.color != color;
+      old.t != t ||
+      old.progress != progress ||
+      old.burst != burst ||
+      old.color != color;
 }

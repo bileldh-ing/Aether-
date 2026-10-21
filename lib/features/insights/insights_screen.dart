@@ -22,7 +22,9 @@ class InsightsFocusController extends Notifier<InsightsFocus> {
   void set(InsightsFocus f) => state = f;
 }
 
-final insightsFocusProvider = NotifierProvider<InsightsFocusController, InsightsFocus>(InsightsFocusController.new);
+final insightsFocusProvider =
+    NotifierProvider<InsightsFocusController, InsightsFocus>(
+        InsightsFocusController.new);
 
 class InsightsRangeController extends Notifier<InsightsRange> {
   @override
@@ -30,7 +32,9 @@ class InsightsRangeController extends Notifier<InsightsRange> {
   void set(InsightsRange r) => state = r;
 }
 
-final insightsRangeProvider = NotifierProvider<InsightsRangeController, InsightsRange>(InsightsRangeController.new);
+final insightsRangeProvider =
+    NotifierProvider<InsightsRangeController, InsightsRange>(
+        InsightsRangeController.new);
 
 @immutable
 class Bucket {
@@ -53,7 +57,10 @@ List<Bucket> bucketize(List<DailyStats> days, InsightsRange range) {
   switch (range) {
     case InsightsRange.day:
       final last = days.sublist(days.length > 7 ? days.length - 7 : 0);
-      return [for (final d in last) sum(DateFormat('E').format(d.date).substring(0, 2), [d])];
+      return [
+        for (final d in last)
+          sum(DateFormat('E').format(d.date).substring(0, 2), [d])
+      ];
     case InsightsRange.week:
       final out = <Bucket>[];
       for (var w = 7; w >= 0; w--) {
@@ -67,14 +74,19 @@ List<Bucket> bucketize(List<DailyStats> days, InsightsRange range) {
     case InsightsRange.year:
       final byMonth = <String, List<DailyStats>>{};
       for (final d in days) {
-        byMonth.putIfAbsent(DateFormat('yyyy-MM').format(d.date), () => []).add(d);
+        byMonth
+            .putIfAbsent(DateFormat('yyyy-MM').format(d.date), () => [])
+            .add(d);
       }
       final keys = byMonth.keys.toList()..sort();
       final year = days.last.date.year;
       final pick = range == InsightsRange.month
           ? keys.sublist(keys.length > 4 ? keys.length - 4 : 0)
           : keys.where((k) => k.startsWith('$year')).toList();
-      return [for (final k in pick) sum(DateFormat('MMM').format(DateTime.parse('$k-01')), byMonth[k]!)];
+      return [
+        for (final k in pick)
+          sum(DateFormat('MMM').format(DateTime.parse('$k-01')), byMonth[k]!)
+      ];
   }
 }
 
@@ -90,10 +102,14 @@ class InsightsScreen extends ConsumerWidget {
     final buckets = bucketize(history, range);
     final total = buckets.fold<Bucket>(
       const Bucket('', 0, 0, 0, 0),
-      (a, b) => Bucket('', a.solar + b.solar, a.home + b.home, a.import + b.import, a.export + b.export),
+      (a, b) => Bucket('', a.solar + b.solar, a.home + b.home,
+          a.import + b.import, a.export + b.export),
     );
-    final selfSufficiency = total.home <= 0 ? 0.0 : ((total.home - total.import) / total.home * 100).clamp(0, 100);
-    final saved = (total.home - total.import).clamp(0, double.infinity) * 0.28 + total.export * 0.08;
+    final selfSufficiency = total.home <= 0
+        ? 0.0
+        : ((total.home - total.import) / total.home * 100).clamp(0, 100);
+    final saved = (total.home - total.import).clamp(0, double.infinity) * 0.28 +
+        total.export * 0.08;
     final co2 = total.solar * 0.42;
 
     return SafeArea(
@@ -109,7 +125,10 @@ class InsightsScreen extends ConsumerWidget {
         children: [
           Row(
             children: [
-              const Expanded(child: TabTitle(title: 'Insights', subtitle: 'Where your energy came from and went')),
+              const Expanded(
+                  child: TabTitle(
+                      title: 'Insights',
+                      subtitle: 'Where your energy came from and went')),
               IconCircleButton(
                 icon: AppIcons.export,
                 semanticLabel: 'Export report as CSV',
@@ -132,26 +151,39 @@ class InsightsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _Legend(focus: focus, onFocus: (f) => ref.read(insightsFocusProvider.notifier).set(f)),
+                _Legend(
+                    focus: focus,
+                    onFocus: (f) =>
+                        ref.read(insightsFocusProvider.notifier).set(f)),
                 const SizedBox(height: 18),
-                SizedBox(height: 190, child: _Bars(buckets: buckets, focus: focus)),
+                SizedBox(
+                    height: 190, child: _Bars(buckets: buckets, focus: focus)),
               ],
             ),
           ),
           const SizedBox(height: AppSpace.cardGap),
           Row(
             children: [
-              Expanded(child: _Kpi(icon: AppIcons.home, label: 'Self-sufficiency', value: '${selfSufficiency.toStringAsFixed(0)}%')),
+              Expanded(
+                  child: _Kpi(
+                      icon: AppIcons.home,
+                      label: 'Self-sufficiency',
+                      value: '${selfSufficiency.toStringAsFixed(0)}%')),
               const SizedBox(width: 10),
               Expanded(
                 child: _Kpi(
                   icon: AppIcons.coins,
                   label: 'Money saved',
-                  value: '${settings.currencySymbol}${saved.toStringAsFixed(0)}',
+                  value:
+                      '${settings.currencySymbol}${saved.toStringAsFixed(0)}',
                 ),
               ),
               const SizedBox(width: 10),
-              Expanded(child: _Kpi(icon: AppIcons.leaf, label: 'CO₂ avoided', value: '${co2.toStringAsFixed(0)} kg')),
+              Expanded(
+                  child: _Kpi(
+                      icon: AppIcons.leaf,
+                      label: 'CO₂ avoided',
+                      value: '${co2.toStringAsFixed(0)} kg')),
             ],
           ),
           const SectionHeader('Energy Independence'),
@@ -162,13 +194,17 @@ class InsightsScreen extends ConsumerWidget {
   }
 
   void _export(WidgetRef ref, List<Bucket> buckets, InsightsRange range) {
-    final b = StringBuffer('period,solar_kwh,home_kwh,grid_import_kwh,export_kwh\n');
+    final b =
+        StringBuffer('period,solar_kwh,home_kwh,grid_import_kwh,export_kwh\n');
     for (final x in buckets) {
-      b.writeln('${x.label},${x.solar.toStringAsFixed(2)},${x.home.toStringAsFixed(2)},'
+      b.writeln(
+          '${x.label},${x.solar.toStringAsFixed(2)},${x.home.toStringAsFixed(2)},'
           '${x.import.toStringAsFixed(2)},${x.export.toStringAsFixed(2)}');
     }
     Clipboard.setData(ClipboardData(text: b.toString()));
-    ref.read(toastProvider.notifier).show('CSV report copied · ${range.name} view', tone: ToastTone.success);
+    ref.read(toastProvider.notifier).show(
+        'CSV report copied · ${range.name} view',
+        tone: ToastTone.success);
   }
 }
 
@@ -201,7 +237,9 @@ class _Segmented extends StatelessWidget {
                 bottom: 0,
                 width: w,
                 child: Container(
-                  decoration: BoxDecoration(color: AppColors.ctaWhite, borderRadius: BorderRadius.circular(AppRadii.pill)),
+                  decoration: BoxDecoration(
+                      color: AppColors.ctaWhite,
+                      borderRadius: BorderRadius.circular(AppRadii.pill)),
                 ),
               ),
               Row(
@@ -221,7 +259,9 @@ class _Segmented extends StatelessWidget {
                               style: AppType.body(
                                 13,
                                 weight: FontWeight.w600,
-                                color: value.index == i ? AppColors.ctaText : AppColors.textSecondary,
+                                color: value.index == i
+                                    ? AppColors.ctaText
+                                    : AppColors.textSecondary,
                               ),
                             ),
                           ),
@@ -251,15 +291,22 @@ class _Legend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget item(Color c, String label, InsightsFocus? f) => GestureDetector(
-          onTap: f == null ? null : () => onFocus(focus == f ? InsightsFocus.all : f),
+          onTap: f == null
+              ? null
+              : () => onFocus(focus == f ? InsightsFocus.all : f),
           child: Padding(
             padding: const EdgeInsets.only(right: 14, bottom: 6),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(width: 8, height: 8, decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(2))),
+                Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                        color: c, borderRadius: BorderRadius.circular(2))),
                 const SizedBox(width: 6),
-                Text(label, style: AppType.body(11.5, color: AppColors.textSecondary)),
+                Text(label,
+                    style: AppType.body(11.5, color: AppColors.textSecondary)),
               ],
             ),
           ),
@@ -282,7 +329,9 @@ class _Bars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxY = buckets.fold<double>(1, (a, b) => [a, b.solar, b.home].reduce((x, y) => x > y ? x : y)) * 1.15;
+    final maxY = buckets.fold<double>(
+            1, (a, b) => [a, b.solar, b.home].reduce((x, y) => x > y ? x : y)) *
+        1.15;
     final dimHome = focus != InsightsFocus.all;
     final dimSolarUsed = focus == InsightsFocus.export;
     final rodW = buckets.length > 6 ? 9.0 : 13.0;
@@ -296,7 +345,8 @@ class _Bars extends StatelessWidget {
           borderData: FlBorderData(show: false),
           gridData: FlGridData(
             drawVerticalLine: false,
-            getDrawingHorizontalLine: (_) => const FlLine(color: AppColors.track, strokeWidth: 1),
+            getDrawingHorizontalLine: (_) =>
+                const FlLine(color: AppColors.track, strokeWidth: 1),
           ),
           titlesData: FlTitlesData(
             topTitles: const AxisTitles(),
@@ -307,7 +357,10 @@ class _Bars extends StatelessWidget {
                 reservedSize: 34,
                 getTitlesWidget: (v, m) => v == m.max
                     ? const SizedBox.shrink()
-                    : Text(v.toStringAsFixed(0), style: AppType.mono(9, weight: FontWeight.w400, color: AppColors.textTertiary)),
+                    : Text(v.toStringAsFixed(0),
+                        style: AppType.mono(9,
+                            weight: FontWeight.w400,
+                            color: AppColors.textTertiary)),
               ),
             ),
             bottomTitles: AxisTitles(
@@ -316,10 +369,12 @@ class _Bars extends StatelessWidget {
                 reservedSize: 24,
                 getTitlesWidget: (v, m) {
                   final i = v.toInt();
-                  if (i < 0 || i >= buckets.length) return const SizedBox.shrink();
+                  if (i < 0 || i >= buckets.length)
+                    return const SizedBox.shrink();
                   return Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: Text(buckets[i].label, style: AppType.body(10, color: AppColors.textTertiary)),
+                    child: Text(buckets[i].label,
+                        style: AppType.body(10, color: AppColors.textTertiary)),
                   );
                 },
               ),
@@ -341,7 +396,8 @@ class _Bars extends StatelessWidget {
                         buckets[i].solar - buckets[i].export,
                         _cSolarUsed.withValues(alpha: dimSolarUsed ? 0.25 : 1),
                       ),
-                      BarChartRodStackItem(buckets[i].solar - buckets[i].export, buckets[i].solar, _cExport),
+                      BarChartRodStackItem(buckets[i].solar - buckets[i].export,
+                          buckets[i].solar, _cExport),
                     ],
                   ),
                   BarChartRodData(
@@ -387,9 +443,16 @@ class _Kpi extends StatelessWidget {
           children: [
             Icon(icon, size: 18, color: AppColors.mint),
             const SizedBox(height: 14),
-            FittedBox(fit: BoxFit.scaleDown, child: Text(value, style: AppType.display(20, weight: FontWeight.w500, tabular: true))),
+            FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(value,
+                    style: AppType.display(20,
+                        weight: FontWeight.w500, tabular: true))),
             const SizedBox(height: 2),
-            Text(label, style: AppType.body(11, color: AppColors.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
+            Text(label,
+                style: AppType.body(11, color: AppColors.textSecondary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis),
           ],
         ),
       );
@@ -407,7 +470,8 @@ class _HeatStrip extends StatelessWidget {
     return SurfaceCard(
       radius: AppRadii.card,
       onTap: onTap,
-      semanticLabel: 'Independence history, last 8 weeks. Opens streak calendar.',
+      semanticLabel:
+          'Independence history, last 8 weeks. Opens streak calendar.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

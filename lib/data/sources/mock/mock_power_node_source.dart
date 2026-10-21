@@ -150,9 +150,16 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
       } else {
         independent = r.nextDouble() > 0.35;
       }
-      final import = independent ? home * (0.01 + r.nextDouble() * 0.03) : home * (0.09 + r.nextDouble() * 0.2);
+      final import = independent
+          ? home * (0.01 + r.nextDouble() * 0.03)
+          : home * (0.09 + r.nextDouble() * 0.2);
       final export = solar * (0.45 + r.nextDouble() * 0.2);
-      out.add(DailyStats(date: d, solarKwh: solar, homeKwh: home, importKwh: import, exportKwh: export));
+      out.add(DailyStats(
+          date: d,
+          solarKwh: solar,
+          homeKwh: home,
+          importKwh: import,
+          exportKwh: export));
     }
     return out;
   }
@@ -169,7 +176,12 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
 
   void _computeFlows(DateTime t) {
     final m = DayCurves.minuteOf(t);
-    _solarW = _nodeOnline ? DayCurves.solarShape(m) * DayCurves.peakW * DayCurves.weather(t) * _noise() : 0;
+    _solarW = _nodeOnline
+        ? DayCurves.solarShape(m) *
+            DayCurves.peakW *
+            DayCurves.weather(t) *
+            _noise()
+        : 0;
     _loadW = DayCurves.homeLoad(m) * _noise();
   }
 
@@ -194,7 +206,8 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
 
     if (surplus >= 0) {
       final roomW = (capacityWh - _storedWh) / (efficiency * h);
-      final wantsCharge = _mode != EnergyMode.gridExport || _storedWh / capacityWh < 0.5;
+      final wantsCharge =
+          _mode != EnergyMode.gridExport || _storedWh / capacityWh < 0.5;
       charge = wantsCharge ? math.min(surplus, math.min(maxChargeW, roomW)) : 0;
       final rest = surplus - charge;
       grid = _gridOnline ? -rest : 0; // curtailed when islanded
@@ -204,16 +217,22 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
         final availW = _storedWh * efficiency / h;
         discharge = math.min(deficit, math.min(maxDischargeW, availW));
       } else {
-        final floorPct = _autonomy ? _effectiveReserve : math.max(_effectiveReserve, 50);
+        final floorPct =
+            _autonomy ? _effectiveReserve : math.max(_effectiveReserve, 50);
         final hour = t.hour;
-        final touBlocked = _mode == EnergyMode.timeOfUse && (hour < 17 || hour >= 22);
-        final availW = math.max(0.0, (_storedWh - floorPct / 100 * capacityWh) * efficiency / h);
-        discharge = touBlocked ? 0 : math.min(deficit, math.min(maxDischargeW, availW));
+        final touBlocked =
+            _mode == EnergyMode.timeOfUse && (hour < 17 || hour >= 22);
+        final availW = math.max(
+            0.0, (_storedWh - floorPct / 100 * capacityWh) * efficiency / h);
+        discharge =
+            touBlocked ? 0 : math.min(deficit, math.min(maxDischargeW, availW));
         grid = deficit - discharge;
       }
     }
 
-    _storedWh = (_storedWh + charge * efficiency * h - discharge / efficiency * h).clamp(0, capacityWh);
+    _storedWh =
+        (_storedWh + charge * efficiency * h - discharge / efficiency * h)
+            .clamp(0, capacityWh);
     _batteryW = charge - discharge;
     _gridW = grid;
 
@@ -288,7 +307,8 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
       estRuntimeH: Metrics.runtimeHours(_storedWh, _loadWindow.toList()),
       state: state,
       nodeOnline: _nodeOnline,
-      selfConsumptionPct: Metrics.selfConsumptionPct(solarWh: _todaySolarWh, exportWh: _todayExportWh),
+      selfConsumptionPct: Metrics.selfConsumptionPct(
+          solarWh: _todaySolarWh, exportWh: _todayExportWh),
       monthSolarKwh: _monthSolarWh / 1000,
       monthExportKwh: _monthExportWh / 1000,
       todaySolarKwh: _todaySolarWh / 1000,
@@ -343,7 +363,9 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
         label: labels[i],
         watts: w,
         tempC: 17 + w / 1600 * 32,
-        status: !_nodeOnline ? InverterStatus.idle : (w > 5 ? InverterStatus.producing : InverterStatus.idle),
+        status: !_nodeOnline
+            ? InverterStatus.idle
+            : (w > 5 ? InverterStatus.producing : InverterStatus.idle),
       );
     });
   }
@@ -376,7 +398,10 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
     final r = math.Random(t.day);
     return [
       for (var x = 0.0; x <= m; x += 5)
-        DayCurves.solarShape(x) * DayCurves.peakW * w * (1 + (r.nextDouble() * 2 - 1) * 0.03),
+        DayCurves.solarShape(x) *
+            DayCurves.peakW *
+            w *
+            (1 + (r.nextDouble() * 2 - 1) * 0.03),
     ];
   }
 
@@ -394,23 +419,29 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
   }
 
   @override
-  Stream<DiscoveredNode> scan({Duration timeout = const Duration(seconds: 8)}) async* {
+  Stream<DiscoveredNode> scan(
+      {Duration timeout = const Duration(seconds: 8)}) async* {
     await Future<void>.delayed(const Duration(milliseconds: 1600));
     final end = DateTime.now().add(timeout);
     while (DateTime.now().isBefore(end)) {
-      yield DiscoveredNode(id: _node.id, mesh: '5.8 GHz Mesh', signalPercent: 96 + _rng.nextInt(3));
+      yield DiscoveredNode(
+          id: _node.id,
+          mesh: '5.8 GHz Mesh',
+          signalPercent: 96 + _rng.nextInt(3));
       await Future<void>.delayed(const Duration(seconds: 1));
     }
   }
 
   @override
-  Future<PairingResult> pair(DiscoveredNode node, {required String ownerName, required String publicKey}) async {
+  Future<PairingResult> pair(DiscoveredNode node,
+      {required String ownerName, required String publicKey}) async {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     return PairingResult(
       node: node,
       ownerName: ownerName,
       microinverters: 3,
-      keyFingerprint: publicKey.length > 16 ? publicKey.substring(0, 16) : publicKey,
+      keyFingerprint:
+          publicKey.length > 16 ? publicKey.substring(0, 16) : publicKey,
     );
   }
 
@@ -435,7 +466,8 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
   Future<void> setMode(EnergyMode mode) async => _mode = mode;
 
   @override
-  Future<void> setReserve(int percent) async => _reserve = percent.clamp(10, 100);
+  Future<void> setReserve(int percent) async =>
+      _reserve = percent.clamp(10, 100);
 
   @override
   Future<void> setAutonomy(bool enabled) async => _autonomy = enabled;
@@ -468,24 +500,38 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
   Stream<FirmwareStatus> installFirmware() async* {
     final target = _firmwareAvailable;
     if (target == null) {
-      yield FirmwareStatus(current: _firmware, phase: FirmwarePhase.done, progress: 1);
+      yield FirmwareStatus(
+          current: _firmware, phase: FirmwarePhase.done, progress: 1);
       return;
     }
     _updating = true;
     for (var i = 0; i <= 20; i++) {
-      yield FirmwareStatus(current: _firmware, available: target, phase: FirmwarePhase.downloading, progress: i / 20 * 0.6);
+      yield FirmwareStatus(
+          current: _firmware,
+          available: target,
+          phase: FirmwarePhase.downloading,
+          progress: i / 20 * 0.6);
       await Future<void>.delayed(const Duration(milliseconds: 150));
     }
     for (var i = 0; i <= 10; i++) {
-      yield FirmwareStatus(current: _firmware, available: target, phase: FirmwarePhase.installing, progress: 0.6 + i / 10 * 0.3);
+      yield FirmwareStatus(
+          current: _firmware,
+          available: target,
+          phase: FirmwarePhase.installing,
+          progress: 0.6 + i / 10 * 0.3);
       await Future<void>.delayed(const Duration(milliseconds: 200));
     }
-    yield FirmwareStatus(current: _firmware, available: target, phase: FirmwarePhase.restarting, progress: 0.95);
+    yield FirmwareStatus(
+        current: _firmware,
+        available: target,
+        phase: FirmwarePhase.restarting,
+        progress: 0.95);
     await Future<void>.delayed(const Duration(seconds: 2));
     _firmware = target;
     _firmwareAvailable = null;
     _updating = false;
-    yield FirmwareStatus(current: _firmware, phase: FirmwarePhase.done, progress: 1);
+    yield FirmwareStatus(
+        current: _firmware, phase: FirmwarePhase.done, progress: 1);
   }
 
   // ───────────────────────────── ScenarioControl
@@ -494,7 +540,8 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
   void triggerOutage() {
     if (!_gridOnline) return;
     _gridOnline = false;
-    _events.add(NodeEvent(NodeEventType.outage, runtimeH: Metrics.runtimeHours(_storedWh, _loadWindow.toList())));
+    _events.add(NodeEvent(NodeEventType.outage,
+        runtimeH: Metrics.runtimeHours(_storedWh, _loadWindow.toList())));
     _emit();
   }
 
@@ -523,7 +570,8 @@ class MockPowerNodeSource implements PowerNodeRepository, ScenarioControl {
   @override
   void toggleNodeOffline() {
     _nodeOnline = !_nodeOnline;
-    _events.add(NodeEvent(_nodeOnline ? NodeEventType.online : NodeEventType.offline));
+    _events.add(
+        NodeEvent(_nodeOnline ? NodeEventType.online : NodeEventType.offline));
     _emit();
   }
 
