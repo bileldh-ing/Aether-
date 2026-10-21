@@ -1,6 +1,7 @@
 // Renders every main screen to PNG for visual review against the references.
 // Run with: flutter test test_screens --update-goldens
 // Output lands in test_screens/goldens/.
+// ignore_for_file: invalid_use_of_visible_for_testing_member
 import 'package:aether_grid/app/app.dart';
 import 'package:aether_grid/app/config.dart';
 import 'package:aether_grid/app/providers.dart';
