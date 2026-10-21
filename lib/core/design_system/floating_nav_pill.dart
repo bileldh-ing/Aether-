@@ -34,7 +34,8 @@ class FloatingNavPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const pad = 8.0;
-    final width = items.length * slot + pad * 2;
+    // +2 for the 1 px glass border on each side.
+    final width = items.length * slot + pad * 2 + 2;
     return GlassCard(
       height: height,
       width: width,

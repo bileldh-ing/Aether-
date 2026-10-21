@@ -64,8 +64,9 @@ class SecurityService {
   /// Signs a command payload; the node verifies with the registered public key.
   Future<String> sign(String payload) async {
     final seed = await _store.read(_seedKey);
-    if (seed == null)
+    if (seed == null) {
       throw StateError('No owner key. Pair the Power Core first.');
+    }
     final pair = await _algo.newKeyPairFromSeed(base64Decode(seed));
     final sig = await _algo.sign(utf8.encode(payload), keyPair: pair);
     return base64Encode(sig.bytes);

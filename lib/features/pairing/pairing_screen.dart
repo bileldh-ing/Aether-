@@ -21,14 +21,17 @@ class PairingScreen extends ConsumerStatefulWidget {
   ConsumerState<PairingScreen> createState() => _PairingScreenState();
 }
 
-class _PairingScreenState extends ConsumerState<PairingScreen> with SingleTickerProviderStateMixin {
-  late final AnimationController _burst = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
+class _PairingScreenState extends ConsumerState<PairingScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _burst = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 900));
 
   @override
   void initState() {
     super.initState();
     if (widget.autoScan) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(pairingProvider.notifier).startScan());
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => ref.read(pairingProvider.notifier).startScan());
     }
   }
 
@@ -51,10 +54,13 @@ class _PairingScreenState extends ConsumerState<PairingScreen> with SingleTicker
   @override
   Widget build(BuildContext context) {
     ref.listen(pairingProvider.select((s) => s.phase), (prev, next) {
-      if (next == PairingPhase.success && prev != PairingPhase.success) _onSuccess();
+      if (next == PairingPhase.success && prev != PairingPhase.success)
+        _onSuccess();
     });
     final s = ref.watch(pairingProvider);
-    final found = s.node != null && s.phase != PairingPhase.scanning && s.phase != PairingPhase.notFound;
+    final found = s.node != null &&
+        s.phase != PairingPhase.scanning &&
+        s.phase != PairingPhase.notFound;
 
     final pillLabel = switch (s.phase) {
       PairingPhase.scanning => 'SCANNING',
@@ -105,7 +111,8 @@ class _PairingScreenState extends ConsumerState<PairingScreen> with SingleTicker
                   Text(
                     Copy.connectTitle,
                     textAlign: TextAlign.center,
-                    style: AppType.display(math.min(32, w * 0.082), weight: FontWeight.w500),
+                    style: AppType.display(math.min(32, w * 0.082),
+                        weight: FontWeight.w500),
                   ),
                   const SizedBox(height: 10),
                   Padding(
@@ -113,7 +120,10 @@ class _PairingScreenState extends ConsumerState<PairingScreen> with SingleTicker
                     child: Text(
                       Copy.connectSubtitle,
                       textAlign: TextAlign.center,
-                      style: AppType.body(13.5, weight: FontWeight.w500, color: AppColors.textSecondary, height: 1.4),
+                      style: AppType.body(13.5,
+                          weight: FontWeight.w500,
+                          color: AppColors.textSecondary,
+                          height: 1.4),
                     ),
                   ),
                   const Spacer(flex: 3),
@@ -125,28 +135,39 @@ class _PairingScreenState extends ConsumerState<PairingScreen> with SingleTicker
                       fast: s.phase == PairingPhase.scanning ||
                           s.phase == PairingPhase.pairing ||
                           s.phase == PairingPhase.commissioning,
-                      progress: s.phase == PairingPhase.commissioning || s.phase == PairingPhase.success ? s.progress : 0,
+                      progress: s.phase == PairingPhase.commissioning ||
+                              s.phase == PairingPhase.success
+                          ? s.progress
+                          : 0,
                       burst: _burst.value,
                       color: pillColor,
                       child: Hero(
                         tag: coreDiscHeroTag,
-                        child: _DiscContent(state: s, success: _burst.value > 0.3),
+                        child:
+                            _DiscContent(state: s, success: _burst.value > 0.3),
                       ),
                     ),
                   ),
                   const Spacer(flex: 3),
                   AnimatedSwitcher(
                     duration: context.motion(AppMotion.medium),
-                    child: s.phase == PairingPhase.notFound || s.phase == PairingPhase.error
-                        ? _NotFound(key: const ValueKey('nf'), message: s.error ?? Copy.notFound)
-                        : _Tiles(key: const ValueKey('tiles'), visible: found, result: s.result),
+                    child: s.phase == PairingPhase.notFound ||
+                            s.phase == PairingPhase.error
+                        ? _NotFound(
+                            key: const ValueKey('nf'),
+                            message: s.error ?? Copy.notFound)
+                        : _Tiles(
+                            key: const ValueKey('tiles'),
+                            visible: found,
+                            result: s.result),
                   ),
                   const Spacer(flex: 2),
                   _Cta(state: s),
                   const SizedBox(height: 16),
                   Text(
                     AppBrand.footer,
-                    style: AppType.mono(10.5, weight: FontWeight.w400, color: AppColors.textTertiary),
+                    style: AppType.mono(10.5,
+                        weight: FontWeight.w400, color: AppColors.textTertiary),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -167,7 +188,8 @@ class _DiscContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final node = state.node;
-    final scanning = state.phase == PairingPhase.scanning || state.phase == PairingPhase.notFound;
+    final scanning = state.phase == PairingPhase.scanning ||
+        state.phase == PairingPhase.notFound;
     return Material(
       type: MaterialType.transparency,
       child: Center(
@@ -180,7 +202,8 @@ class _DiscContent extends StatelessWidget {
                   children: [
                     const Icon(AppIcons.check, color: AppColors.mint, size: 44),
                     const SizedBox(height: 8),
-                    Text('Node ready', style: AppType.body(13, color: AppColors.mint)),
+                    Text('Node ready',
+                        style: AppType.body(13, color: AppColors.mint)),
                   ],
                 )
               : scanning || node == null
@@ -188,9 +211,12 @@ class _DiscContent extends StatelessWidget {
                       key: const ValueKey('scan'),
                       padding: const EdgeInsets.symmetric(horizontal: 22),
                       child: Text(
-                        state.phase == PairingPhase.notFound ? 'No signal' : Copy.looking,
+                        state.phase == PairingPhase.notFound
+                            ? 'No signal'
+                            : Copy.looking,
                         textAlign: TextAlign.center,
-                        style: AppType.body(12.5, color: AppColors.textSecondary),
+                        style:
+                            AppType.body(12.5, color: AppColors.textSecondary),
                       ),
                     )
                   : FittedBox(
@@ -203,7 +229,9 @@ class _DiscContent extends StatelessWidget {
                             Container(
                               width: 40,
                               height: 40,
-                              decoration: const BoxDecoration(color: Color(0xFF2A2C2F), shape: BoxShape.circle),
+                              decoration: const BoxDecoration(
+                                  color: Color(0xFF2A2C2F),
+                                  shape: BoxShape.circle),
                               child: Center(
                                 child: Container(
                                   width: 16,
@@ -211,15 +239,25 @@ class _DiscContent extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     color: AppColors.mint,
                                     shape: BoxShape.circle,
-                                    boxShadow: [BoxShadow(color: AppColors.mint.withValues(alpha: 0.6), blurRadius: 10)],
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: AppColors.mint
+                                              .withValues(alpha: 0.6),
+                                          blurRadius: 10)
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            Text(node.id, style: AppType.mono(14, weight: FontWeight.w700, spacing: 0.5)),
+                            Text(node.id,
+                                style: AppType.mono(14,
+                                    weight: FontWeight.w700, spacing: 0.5)),
                             const SizedBox(height: 4),
-                            Text(node.mesh, style: AppType.body(11.5, weight: FontWeight.w500, color: AppColors.textSecondary)),
+                            Text(node.mesh,
+                                style: AppType.body(11.5,
+                                    weight: FontWeight.w500,
+                                    color: AppColors.textSecondary)),
                             const SizedBox(height: 8),
                             Row(
                               mainAxisSize: MainAxisSize.min,
@@ -227,12 +265,16 @@ class _DiscContent extends StatelessWidget {
                                 Container(
                                   width: 7,
                                   height: 7,
-                                  decoration: const BoxDecoration(color: AppColors.mint, shape: BoxShape.circle),
+                                  decoration: const BoxDecoration(
+                                      color: AppColors.mint,
+                                      shape: BoxShape.circle),
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
                                   'Signal ${node.signalPercent}%',
-                                  style: AppType.body(11.5, weight: FontWeight.w600, color: AppColors.mint),
+                                  style: AppType.body(11.5,
+                                      weight: FontWeight.w600,
+                                      color: AppColors.mint),
                                 ),
                               ],
                             ),
@@ -262,7 +304,8 @@ class _Tiles extends StatelessWidget {
           _Tile(
             icon: AppIcons.shield,
             title: Copy.ownerKey,
-            subtitle: ready ? '${result!.ownerName} (Admin)' : 'Generating key…',
+            subtitle:
+                ready ? '${result!.ownerName} (Admin)' : 'Generating key…',
             trailing: ready
                 ? const Icon(AppIcons.check, color: AppColors.mint, size: 22)
                 : const _MiniSpinner(),
@@ -271,9 +314,13 @@ class _Tiles extends StatelessWidget {
           _Tile(
             icon: AppIcons.inverter,
             title: Copy.inverterBridge,
-            subtitle: ready ? '${result!.microinverters}x Microinverters Detected' : 'Listening for inverters…',
+            subtitle: ready
+                ? '${result!.microinverters}x Microinverters Detected'
+                : 'Listening for inverters…',
             trailing: ready
-                ? Text(Copy.ready, style: AppType.body(13, weight: FontWeight.w600, color: AppColors.mint))
+                ? Text(Copy.ready,
+                    style: AppType.body(13,
+                        weight: FontWeight.w600, color: AppColors.mint))
                 : const _MiniSpinner(),
           ),
         ],
@@ -283,7 +330,11 @@ class _Tiles extends StatelessWidget {
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile({required this.icon, required this.title, required this.subtitle, required this.trailing});
+  const _Tile(
+      {required this.icon,
+      required this.title,
+      required this.subtitle,
+      required this.trailing});
   final IconData icon;
   final String title;
   final String subtitle;
@@ -302,9 +353,15 @@ class _Tile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppType.body(13.5, weight: FontWeight.w600), maxLines: 1),
+                  Text(title,
+                      style: AppType.body(13.5, weight: FontWeight.w600),
+                      maxLines: 1),
                   const SizedBox(height: 3),
-                  Text(subtitle, style: AppType.body(12, weight: FontWeight.w500, color: AppColors.textSecondary), maxLines: 1),
+                  Text(subtitle,
+                      style: AppType.body(12,
+                          weight: FontWeight.w500,
+                          color: AppColors.textSecondary),
+                      maxLines: 1),
                 ],
               ),
             ),
@@ -320,7 +377,8 @@ class _MiniSpinner extends StatelessWidget {
   Widget build(BuildContext context) => const SizedBox(
         width: 18,
         height: 18,
-        child: CircularProgressIndicator(strokeWidth: 1.6, color: AppColors.mint),
+        child:
+            CircularProgressIndicator(strokeWidth: 1.6, color: AppColors.mint),
       );
 }
 
@@ -334,16 +392,25 @@ class _NotFound extends ConsumerWidget {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: AppType.body(13.5, weight: FontWeight.w500, color: AppColors.textSecondary, height: 1.45),
+            style: AppType.body(13.5,
+                weight: FontWeight.w500,
+                color: AppColors.textSecondary,
+                height: 1.45),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: GhostButton(label: Copy.tryAgain, onTap: () => ref.read(pairingProvider.notifier).startScan()),
+                child: GhostButton(
+                    label: Copy.tryAgain,
+                    onTap: () =>
+                        ref.read(pairingProvider.notifier).startScan()),
               ),
               const SizedBox(width: 12),
-              Expanded(child: GhostButton(label: Copy.scanQrInstead, onTap: () => context.push(Routes.qr))),
+              Expanded(
+                  child: GhostButton(
+                      label: Copy.scanQrInstead,
+                      onTap: () => context.push(Routes.qr))),
             ],
           ),
         ],
@@ -357,13 +424,15 @@ class _Cta extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final running = state.phase == PairingPhase.commissioning || state.phase == PairingPhase.success;
+    final running = state.phase == PairingPhase.commissioning ||
+        state.phase == PairingPhase.success;
     final enabled = state.phase == PairingPhase.ready;
     return AnimatedSwitcher(
       duration: context.motion(AppMotion.medium),
       transitionBuilder: (c, a) => FadeTransition(
         opacity: a,
-        child: ScaleTransition(scale: Tween(begin: 0.96, end: 1.0).animate(a), child: c),
+        child: ScaleTransition(
+            scale: Tween(begin: 0.96, end: 1.0).animate(a), child: c),
       ),
       child: running
           ? _ProgressCapsule(key: const ValueKey('p'), state: state)
@@ -371,7 +440,9 @@ class _Cta extends ConsumerWidget {
               key: const ValueKey('b'),
               label: Copy.initialize,
               height: 56,
-              onTap: enabled ? () => ref.read(pairingProvider.notifier).initialize() : null,
+              onTap: enabled
+                  ? () => ref.read(pairingProvider.notifier).initialize()
+                  : null,
             ),
     );
   }
@@ -407,7 +478,8 @@ class _ProgressCapsule extends StatelessWidget {
                   const SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 1.8, color: AppColors.mint),
+                    child: CircularProgressIndicator(
+                        strokeWidth: 1.8, color: AppColors.mint),
                   ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -420,7 +492,8 @@ class _ProgressCapsule extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text('$idx/4', style: AppType.mono(12, color: AppColors.textSecondary)),
+                Text('$idx/4',
+                    style: AppType.mono(12, color: AppColors.textSecondary)),
               ],
             ),
             Positioned(

@@ -14,7 +14,8 @@ class SunArt extends StatefulWidget {
 }
 
 class _SunArtState extends State<SunArt> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(seconds: 14));
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: const Duration(seconds: 14));
 
   @override
   void didChangeDependencies() {
@@ -32,7 +33,8 @@ class _SunArtState extends State<SunArt> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) => RepaintBoundary(
         child: AnimatedBuilder(
           animation: _c,
-          builder: (context, _) => CustomPaint(size: Size.square(widget.size), painter: _SunPainter(_c.value)),
+          builder: (context, _) => CustomPaint(
+              size: Size.square(widget.size), painter: _SunPainter(_c.value)),
         ),
       );
 }
@@ -62,7 +64,8 @@ class _SunPainter extends CustomPainter {
       );
     }
     // Harvest arc (mint), sweeping with time.
-    final sweep = math.pi * (0.35 + 0.65 * (0.5 - 0.5 * math.cos(t * 2 * math.pi)));
+    final sweep =
+        math.pi * (0.35 + 0.65 * (0.5 - 0.5 * math.cos(t * 2 * math.pi)));
     canvas.drawArc(
       Rect.fromCircle(center: Offset(w / 2, w * 0.78), radius: w * 0.39),
       math.pi,
@@ -81,7 +84,10 @@ class _SunPainter extends CustomPainter {
       sunR * 2.6,
       Paint()
         ..shader = RadialGradient(
-          colors: [AppColors.amber.withValues(alpha: 0.28), AppColors.amber.withValues(alpha: 0)],
+          colors: [
+            AppColors.amber.withValues(alpha: 0.28),
+            AppColors.amber.withValues(alpha: 0)
+          ],
         ).createShader(Rect.fromCircle(center: c, radius: sunR * 2.6)),
     );
     // Rays.
@@ -144,7 +150,8 @@ class GridArt extends StatefulWidget {
 }
 
 class _GridArtState extends State<GridArt> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 2600));
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 2600));
 
   @override
   void didChangeDependencies() {
@@ -170,20 +177,26 @@ class _GridArtState extends State<GridArt> with SingleTickerProviderStateMixin {
           RepaintBoundary(
             child: AnimatedBuilder(
               animation: _c,
-              builder: (context, _) => CustomPaint(size: Size.square(widget.size), painter: _GridPainter(_c.value)),
+              builder: (context, _) => CustomPaint(
+                  size: Size.square(widget.size),
+                  painter: _GridPainter(_c.value)),
             ),
           ),
           SizedBox(
             width: d,
             height: d,
-            child: CustomPaint(painter: GaugePainter(fraction: 0.84, color: AppColors.mint)),
+            child: CustomPaint(
+                painter: GaugePainter(fraction: 0.84, color: AppColors.mint)),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('< 20 ms', style: AppType.display(widget.size * 0.13, weight: FontWeight.w300)),
+              Text('< 20 ms',
+                  style: AppType.display(widget.size * 0.13,
+                      weight: FontWeight.w300)),
               const SizedBox(height: 4),
-              Text('Island switch-over', style: AppType.body(12, color: AppColors.mint)),
+              Text('Island switch-over',
+                  style: AppType.body(12, color: AppColors.mint)),
             ],
           ),
         ],
@@ -222,7 +235,8 @@ class _GridPainter extends CustomPainter {
       Offset(x, y),
       Paint()
         ..strokeWidth = 2
-        ..shader = LinearGradient(colors: [AppColors.mint.withValues(alpha: 0), AppColors.mint])
+        ..shader = LinearGradient(
+                colors: [AppColors.mint.withValues(alpha: 0), AppColors.mint])
             .createShader(Rect.fromLTWH(x - w * 0.18, y - 1, w * 0.18, 2)),
     );
     canvas.drawCircle(

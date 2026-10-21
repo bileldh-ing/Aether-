@@ -33,7 +33,9 @@ class _QrScanScreenState extends ConsumerState<QrScanScreen> {
           Positioned.fill(
             child: MobileScanner(
               onDetect: (capture) {
-                final raw = capture.barcodes.isEmpty ? null : capture.barcodes.first.rawValue;
+                final raw = capture.barcodes.isEmpty
+                    ? null
+                    : capture.barcodes.first.rawValue;
                 if (raw != null) _use(raw);
               },
               errorBuilder: (context, error) => Center(
@@ -61,12 +63,16 @@ class _QrScanScreenState extends ConsumerState<QrScanScreen> {
           ),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpace.screenH, vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpace.screenH, vertical: 8),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      IconCircleButton(icon: AppIcons.close, semanticLabel: 'Close', onTap: () => context.pop()),
+                      IconCircleButton(
+                          icon: AppIcons.close,
+                          semanticLabel: 'Close',
+                          onTap: () => context.pop()),
                       const Spacer(),
                       const StatusPill(label: 'SCAN QR CODE'),
                       const Spacer(),
@@ -80,7 +86,9 @@ class _QrScanScreenState extends ConsumerState<QrScanScreen> {
                     style: AppType.body(14, color: AppColors.textPrimary),
                   ),
                   const SizedBox(height: 16),
-                  GhostButton(label: 'Use demo code', onTap: () => _use('aether://pair?id=NEXUS-CORE-901')),
+                  GhostButton(
+                      label: 'Use demo code',
+                      onTap: () => _use('aether://pair?id=NEXUS-CORE-901')),
                   const SizedBox(height: 12),
                 ],
               ),

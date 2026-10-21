@@ -13,7 +13,8 @@ class HomeTabController extends Notifier<int> {
   void select(int i) => state = i;
 }
 
-final homeTabProvider = NotifierProvider<HomeTabController, int>(HomeTabController.new);
+final homeTabProvider =
+    NotifierProvider<HomeTabController, int>(HomeTabController.new);
 
 const _items = [
   NavItem(AppIcons.bolt, 'Energy'),
@@ -35,7 +36,12 @@ class HomeShell extends ConsumerWidget {
         children: [
           IndexedStack(
             index: tab,
-            children: const [DashboardScreen(), SolarScreen(), InsightsScreen(), SettingsScreen()],
+            children: const [
+              DashboardScreen(),
+              SolarScreen(),
+              InsightsScreen(),
+              SettingsScreen()
+            ],
           ),
           // Fade content out under the floating nav.
           Positioned(

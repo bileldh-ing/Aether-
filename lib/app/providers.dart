@@ -347,8 +347,9 @@ class AlertsController extends Notifier<AlertsState> {
             'Running on stored energy · about $rt left.');
         toast.show('Island mode · about $rt of backup',
             tone: ToastTone.warning);
-        if (settings.notifyOutage)
+        if (settings.notifyOutage) {
           unawaited(push.show('Grid outage detected', Copy.outageBody(rt)));
+        }
       case NodeEventType.restored:
         _add(AlertType.restored, 'Grid restored',
             'Your Core is back on the grid and recharging.');
@@ -405,10 +406,11 @@ class FirmwareController extends Notifier<FirmwareStatus> {
   Future<void> check() async {
     final s = await ref.read(powerNodeRepositoryProvider).checkFirmware();
     state = s;
-    if (s.available == null)
+    if (s.available == null) {
       ref
           .read(toastProvider.notifier)
           .show('Firmware ${s.current} is up to date');
+    }
   }
 
   void install() {

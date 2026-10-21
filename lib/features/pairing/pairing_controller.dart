@@ -8,7 +8,15 @@ import '../../app/providers.dart';
 import '../../core/haptics/haptics.dart';
 import '../../domain/entities/entities.dart';
 
-enum PairingPhase { scanning, notFound, pairing, ready, commissioning, success, error }
+enum PairingPhase {
+  scanning,
+  notFound,
+  pairing,
+  ready,
+  commissioning,
+  success,
+  error
+}
 
 @immutable
 class PairingState {
@@ -79,11 +87,13 @@ class PairingController extends Notifier<PairingState> {
         if (state.phase == PairingPhase.scanning) {
           state = state.copyWith(node: node, phase: PairingPhase.pairing);
           unawaited(_pair(node));
-        } else if (state.phase == PairingPhase.ready || state.phase == PairingPhase.pairing) {
+        } else if (state.phase == PairingPhase.ready ||
+            state.phase == PairingPhase.pairing) {
           state = state.copyWith(node: node);
         }
       },
-      onError: (Object e) => state = state.copyWith(phase: PairingPhase.error, error: e.toString()),
+      onError: (Object e) => state =
+          state.copyWith(phase: PairingPhase.error, error: e.toString()),
     );
   }
 
@@ -91,11 +101,15 @@ class PairingController extends Notifier<PairingState> {
   void pairFromQr(String payload) {
     final id = Uri.tryParse(payload)?.queryParameters['id'] ?? payload;
     if (!id.startsWith('NEXUS-CORE-')) {
-      state = state.copyWith(phase: PairingPhase.error, error: 'That code is not an Aether Power Core. Scan the label on the back of the unit.');
+      state = state.copyWith(
+          phase: PairingPhase.error,
+          error:
+              'That code is not an Aether Power Core. Scan the label on the back of the unit.');
       return;
     }
     _cancel();
-    final node = DiscoveredNode(id: id, mesh: '5.8 GHz Mesh', signalPercent: 98);
+    final node =
+        DiscoveredNode(id: id, mesh: '5.8 GHz Mesh', signalPercent: 98);
     state = PairingState(phase: PairingPhase.pairing, node: node);
     unawaited(_pair(node));
   }
@@ -103,20 +117,29 @@ class PairingController extends Notifier<PairingState> {
   Future<void> _pair(DiscoveredNode node) async {
     try {
       final pub = await ref.read(securityServiceProvider).ensureOwnerKey();
-      final result = await ref.read(powerNodeRepositoryProvider).pair(node, ownerName: AppBrand.ownerName, publicKey: pub);
+      final result = await ref
+          .read(powerNodeRepositoryProvider)
+          .pair(node, ownerName: AppBrand.ownerName, publicKey: pub);
       state = state.copyWith(phase: PairingPhase.ready, result: result);
     } catch (e) {
-      state = state.copyWith(phase: PairingPhase.error, error: 'Pairing failed. Keep your phone within 3 m of the Core and try again.');
+      state = state.copyWith(
+          phase: PairingPhase.error,
+          error:
+              'Pairing failed. Keep your phone within 3 m of the Core and try again.');
     }
   }
 
   void initialize() {
     if (state.phase != PairingPhase.ready) return;
-    state = state.copyWith(phase: PairingPhase.commissioning, progress: 0, step: CommissionStep.registeringKey);
+    state = state.copyWith(
+        phase: PairingPhase.commissioning,
+        progress: 0,
+        step: CommissionStep.registeringKey);
     _commission = ref.read(powerNodeRepositoryProvider).commission().listen(
       (p) {
         if (p.step == CommissionStep.done) {
-          state = state.copyWith(phase: PairingPhase.success, progress: 1, step: p.step);
+          state = state.copyWith(
+              phase: PairingPhase.success, progress: 1, step: p.step);
           Haptics.success();
           unawaited(ref.read(settingsProvider.notifier).setPaired(true));
         } else {
@@ -125,10 +148,12 @@ class PairingController extends Notifier<PairingState> {
       },
       onError: (Object e) => state = state.copyWith(
         phase: PairingPhase.error,
-        error: 'The Core stopped responding during setup. Power-cycle it and try again.',
+        error:
+            'The Core stopped responding during setup. Power-cycle it and try again.',
       ),
     );
   }
 }
 
-final pairingProvider = NotifierProvider<PairingController, PairingState>(PairingController.new);
+final pairingProvider =
+    NotifierProvider<PairingController, PairingState>(PairingController.new);

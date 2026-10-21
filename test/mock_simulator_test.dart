@@ -3,7 +3,8 @@ import 'package:aether_grid/data/sources/mock/mock_power_node_source.dart';
 import 'package:aether_grid/domain/entities/entities.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-MockPowerNodeSource _sim(DateTime at) => MockPowerNodeSource(clock: () => at, autoStart: false);
+MockPowerNodeSource _sim(DateTime at) =>
+    MockPowerNodeSource(clock: () => at, autoStart: false);
 
 /// Advances one simulated second and returns the snapshot it produced.
 Future<EnergySnapshot> _latest(MockPowerNodeSource s) {
@@ -16,10 +17,12 @@ void main() {
     test('no sun before sunrise or after sunset, full shape at peak', () {
       expect(DayCurves.solarShape(6 * 60), 0);
       expect(DayCurves.solarShape(20 * 60), 0);
-      expect(DayCurves.solarShape(DayCurves.peakMin.toDouble()), closeTo(1, 1e-9));
+      expect(
+          DayCurves.solarShape(DayCurves.peakMin.toDouble()), closeTo(1, 1e-9));
     });
     test('home load has an evening peak above the night base', () {
-      expect(DayCurves.homeLoad(19 * 60 + 40), greaterThan(DayCurves.homeLoad(3 * 60) * 3));
+      expect(DayCurves.homeLoad(19 * 60 + 40),
+          greaterThan(DayCurves.homeLoad(3 * 60) * 3));
     });
     test('weather is deterministic per day', () {
       final d = DateTime(2026, 10, 21);
@@ -54,7 +57,8 @@ void main() {
       expect((await _latest(sim)).solarW, 0);
     });
 
-    test('outage → island mode with runtime estimate, restore → grid back', () async {
+    test('outage → island mode with runtime estimate, restore → grid back',
+        () async {
       sim = _sim(DateTime(2026, 10, 21, 21));
       final events = <NodeEvent>[];
       final sub = sim.events().listen(events.add);
@@ -71,7 +75,8 @@ void main() {
       expect(back.state, isNot(NodeState.island));
 
       await Future<void>.delayed(Duration.zero);
-      expect(events.map((e) => e.type), [NodeEventType.outage, NodeEventType.restored]);
+      expect(events.map((e) => e.type),
+          [NodeEventType.outage, NodeEventType.restored]);
       expect(events.first.runtimeH, greaterThan(0));
       await sub.cancel();
     });

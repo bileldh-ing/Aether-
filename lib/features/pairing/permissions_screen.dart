@@ -69,17 +69,23 @@ class _PermissionsScreenState extends ConsumerState<PermissionsScreen> {
                 onTap: () => context.go(Routes.onboarding),
               ),
               const SizedBox(height: 28),
-              Text('Let’s find your\nPower Core', style: AppType.display(32, weight: FontWeight.w600, height: 1.1)),
+              Text('Let’s find your\nPower Core',
+                  style: AppType.display(32,
+                      weight: FontWeight.w600, height: 1.1)),
               const SizedBox(height: 10),
               Text(
                 'Aether talks to the Core directly over Bluetooth and your local network. Nothing leaves your home without your say.',
-                style: AppType.body(14, weight: FontWeight.w400, color: AppColors.textSecondary, height: 1.45),
+                style: AppType.body(14,
+                    weight: FontWeight.w400,
+                    color: AppColors.textSecondary,
+                    height: 1.45),
               ),
               const SizedBox(height: 28),
               const _Row(
                 icon: AppIcons.bluetooth,
                 title: 'Bluetooth',
-                body: 'Finds the Core and hands it your Wi-Fi details during setup.',
+                body:
+                    'Finds the Core and hands it your Wi-Fi details during setup.',
               ),
               const _Row(
                 icon: AppIcons.nearby,
@@ -89,7 +95,8 @@ class _PermissionsScreenState extends ConsumerState<PermissionsScreen> {
               const _Row(
                 icon: AppIcons.bell,
                 title: 'Notifications',
-                body: 'Tells you the moment the grid drops or your reserve runs low.',
+                body:
+                    'Tells you the moment the grid drops or your reserve runs low.',
               ),
               const Spacer(),
               if (_denied)
@@ -100,12 +107,15 @@ class _PermissionsScreenState extends ConsumerState<PermissionsScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        const Icon(AppIcons.warning, color: AppColors.amber, size: 18),
+                        const Icon(AppIcons.warning,
+                            color: AppColors.amber, size: 18),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Bluetooth access is off for ${AppBrand.name}. Turn it on in Settings › Apps › Aether Grid, then come back.',
-                            style: AppType.body(13, weight: FontWeight.w500, color: AppColors.textSecondary),
+                            style: AppType.body(13,
+                                weight: FontWeight.w500,
+                                color: AppColors.textSecondary),
                           ),
                         ),
                       ],
@@ -145,9 +155,13 @@ class _Row extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: AppType.body(14, weight: FontWeight.w600)),
+                    Text(title,
+                        style: AppType.body(14, weight: FontWeight.w600)),
                     const SizedBox(height: 3),
-                    Text(body, style: AppType.body(12.5, weight: FontWeight.w500, color: AppColors.textSecondary)),
+                    Text(body,
+                        style: AppType.body(12.5,
+                            weight: FontWeight.w500,
+                            color: AppColors.textSecondary)),
                   ],
                 ),
               ),

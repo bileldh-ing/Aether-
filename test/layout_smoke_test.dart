@@ -18,6 +18,7 @@ const _sizes = <String, Size>{
 
 const _routes = [
   Routes.onboarding,
+  Routes.permissions,
   Routes.home,
   Routes.flow,
   Routes.streak,
@@ -46,8 +47,7 @@ void main() {
           sharedPrefsProvider.overrideWithValue(prefs),
           appConfigProvider
               .overrideWithValue(const AppConfig(enableNotifications: false)),
-          powerNodeRepositoryProvider
-              .overrideWithValue(sim),
+          powerNodeRepositoryProvider.overrideWithValue(sim),
         ]);
         addTearDown(container.dispose);
 
@@ -64,6 +64,17 @@ void main() {
         }
 
         expect(tester.takeException(), isNull);
+
+        // On the home shell, visit every tab too.
+        if (route == Routes.home) {
+          for (final tab in const ['Solar', 'Insights', 'Settings', 'Energy']) {
+            await tester.tap(find.bySemanticsLabel(tab));
+            for (var i = 0; i < 8; i++) {
+              await tester.pump(const Duration(milliseconds: 120));
+            }
+            expect(tester.takeException(), isNull, reason: '$tab tab');
+          }
+        }
 
         // Tear down so periodic animations and streams stop cleanly.
         await tester.pumpWidget(const SizedBox.shrink());

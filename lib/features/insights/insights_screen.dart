@@ -369,8 +369,9 @@ class _Bars extends StatelessWidget {
                 reservedSize: 24,
                 getTitlesWidget: (v, m) {
                   final i = v.toInt();
-                  if (i < 0 || i >= buckets.length)
+                  if (i < 0 || i >= buckets.length) {
                     return const SizedBox.shrink();
+                  }
                   return Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(buckets[i].label,

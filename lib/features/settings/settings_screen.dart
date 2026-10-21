@@ -11,7 +11,8 @@ import '../../core/services/security_service.dart';
 import '../../domain/entities/entities.dart';
 import '../../domain/metrics.dart';
 
-final ownerKeyProvider = FutureProvider<String?>((ref) => ref.watch(securityServiceProvider).publicKey());
+final ownerKeyProvider = FutureProvider<String?>(
+    (ref) => ref.watch(securityServiceProvider).publicKey());
 
 class NodeNameController extends Notifier<String> {
   @override
@@ -23,7 +24,8 @@ class NodeNameController extends Notifier<String> {
   }
 }
 
-final nodeNameProvider = NotifierProvider<NodeNameController, String>(NodeNameController.new);
+final nodeNameProvider =
+    NotifierProvider<NodeNameController, String>(NodeNameController.new);
 
 const _reAuth = ReAuth();
 
@@ -43,7 +45,8 @@ class SettingsScreen extends ConsumerWidget {
           AppSpace.navClearance + MediaQuery.paddingOf(context).bottom,
         ),
         children: const [
-          TabTitle(title: 'Settings', subtitle: '${AppBrand.ownerName} · Admin'),
+          TabTitle(
+              title: 'Settings', subtitle: '${AppBrand.ownerName} · Admin'),
           SizedBox(height: 8),
           SectionHeader('My Power Core'),
           _DeviceCard(),
@@ -68,7 +71,13 @@ class SettingsScreen extends ConsumerWidget {
 // ───────────────────────────── shared rows
 
 class _Row extends StatelessWidget {
-  const _Row({required this.icon, required this.title, this.subtitle, this.trailing, this.onTap, this.color});
+  const _Row(
+      {required this.icon,
+      required this.title,
+      this.subtitle,
+      this.trailing,
+      this.onTap,
+      this.color});
   final IconData icon;
   final String title;
   final String? subtitle;
@@ -91,10 +100,15 @@ class _Row extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppType.body(14, weight: FontWeight.w600, color: color ?? AppColors.textPrimary)),
+                  Text(title,
+                      style: AppType.body(14,
+                          weight: FontWeight.w600,
+                          color: color ?? AppColors.textPrimary)),
                   if (subtitle != null) ...[
                     const SizedBox(height: 2),
-                    Text(subtitle!, style: AppType.body(12, color: AppColors.textSecondary)),
+                    Text(subtitle!,
+                        style:
+                            AppType.body(12, color: AppColors.textSecondary)),
                   ],
                 ],
               ),
@@ -110,7 +124,8 @@ class _Row extends StatelessWidget {
 class _Divider extends StatelessWidget {
   const _Divider();
   @override
-  Widget build(BuildContext context) => Container(height: 1, color: AppColors.divider);
+  Widget build(BuildContext context) =>
+      Container(height: 1, color: AppColors.divider);
 }
 
 class _Card extends StatelessWidget {
@@ -146,7 +161,9 @@ class _SmallPill extends StatelessWidget {
             ),
             child: Text(
               label,
-              style: AppType.body(12.5, weight: FontWeight.w600, color: primary ? AppColors.ctaText : AppColors.textPrimary),
+              style: AppType.body(12.5,
+                  weight: FontWeight.w600,
+                  color: primary ? AppColors.ctaText : AppColors.textPrimary),
             ),
           ),
         ),
@@ -161,11 +178,14 @@ class _DeviceCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final repo = ref.watch(powerNodeRepositoryProvider);
-    final state = ref.watch(snapshotProvider.select((s) => s.value?.state ?? NodeState.idle));
+    final state = ref.watch(
+        snapshotProvider.select((s) => s.value?.state ?? NodeState.idle));
     final fw = ref.watch(firmwareProvider);
     final node = repo.node;
     final name = ref.watch(nodeNameProvider);
-    final updating = fw.phase != FirmwarePhase.idle && fw.phase != FirmwarePhase.done && fw.phase != FirmwarePhase.failed;
+    final updating = fw.phase != FirmwarePhase.idle &&
+        fw.phase != FirmwarePhase.done &&
+        fw.phase != FirmwarePhase.failed;
 
     return SurfaceCard(
       radius: AppRadii.card,
@@ -180,11 +200,19 @@ class _DeviceCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: AppType.display(20, weight: FontWeight.w500)),
+                    Text(name,
+                        style: AppType.display(20, weight: FontWeight.w500)),
                     const SizedBox(height: 4),
-                    Text(node.id, style: AppType.mono(12.5, weight: FontWeight.w600, color: AppColors.textSecondary)),
+                    Text(node.id,
+                        style: AppType.mono(12.5,
+                            weight: FontWeight.w600,
+                            color: AppColors.textSecondary)),
                     const SizedBox(height: 6),
-                    StatusPill(label: Metrics.pillLabel(state), color: state == NodeState.offline ? AppColors.textTertiary : AppColors.mint),
+                    StatusPill(
+                        label: Metrics.pillLabel(state),
+                        color: state == NodeState.offline
+                            ? AppColors.textTertiary
+                            : AppColors.mint),
                   ],
                 ),
               ),
@@ -199,13 +227,16 @@ class _DeviceCard extends ConsumerWidget {
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(color: AppColors.mintDim, borderRadius: BorderRadius.circular(18)),
+              decoration: BoxDecoration(
+                  color: AppColors.mintDim,
+                  borderRadius: BorderRadius.circular(18)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     updating ? _phaseLabel(fw) : '${fw.available} is ready',
-                    style: AppType.body(13.5, weight: FontWeight.w600, color: AppColors.mint),
+                    style: AppType.body(13.5,
+                        weight: FontWeight.w600, color: AppColors.mint),
                   ),
                   const SizedBox(height: 8),
                   if (updating)
@@ -236,14 +267,21 @@ class _DeviceCard extends ConsumerWidget {
               _SmallPill(
                 'Restart',
                 onTap: () {
-                  ref.read(toastProvider.notifier).show('Restarting the Core · back in a few seconds');
+                  ref
+                      .read(toastProvider.notifier)
+                      .show('Restarting the Core · back in a few seconds');
                   repo.restart();
                 },
               ),
               if (fw.available != null && !updating)
-                _SmallPill('Install update', primary: true, onTap: () => ref.read(firmwareProvider.notifier).install())
+                _SmallPill('Install update',
+                    primary: true,
+                    onTap: () => ref.read(firmwareProvider.notifier).install())
               else
-                _SmallPill('Check for updates', onTap: updating ? null : () => ref.read(firmwareProvider.notifier).check()),
+                _SmallPill('Check for updates',
+                    onTap: updating
+                        ? null
+                        : () => ref.read(firmwareProvider.notifier).check()),
             ],
           ),
         ],
@@ -252,8 +290,10 @@ class _DeviceCard extends ConsumerWidget {
   }
 
   String _phaseLabel(FirmwareStatus fw) => switch (fw.phase) {
-        FirmwarePhase.downloading => 'Downloading ${fw.available} · ${(fw.progress * 100).round()}%',
-        FirmwarePhase.installing => 'Installing · ${(fw.progress * 100).round()}%',
+        FirmwarePhase.downloading =>
+          'Downloading ${fw.available} · ${(fw.progress * 100).round()}%',
+        FirmwarePhase.installing =>
+          'Installing · ${(fw.progress * 100).round()}%',
         FirmwarePhase.restarting => 'Restarting the Core…',
         _ => '',
       };
@@ -262,13 +302,19 @@ class _DeviceCard extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Row(
           children: [
-            SizedBox(width: 82, child: Text(k, style: AppType.body(12.5, color: AppColors.textSecondary))),
-            Expanded(child: Text(v, style: AppType.mono(12.5, weight: FontWeight.w500))),
+            SizedBox(
+                width: 82,
+                child: Text(k,
+                    style: AppType.body(12.5, color: AppColors.textSecondary))),
+            Expanded(
+                child: Text(v,
+                    style: AppType.mono(12.5, weight: FontWeight.w500))),
           ],
         ),
       );
 
-  Future<void> _rename(BuildContext context, WidgetRef ref, String current) async {
+  Future<void> _rename(
+      BuildContext context, WidgetRef ref, String current) async {
     final ctrl = TextEditingController(text: current);
     final name = await showModalBottomSheet<String>(
       context: context,
@@ -282,7 +328,9 @@ class _DeviceCard extends ConsumerWidget {
             children: [
               _Field(controller: ctrl, hint: 'e.g. Garage Core'),
               const SizedBox(height: 16),
-              PrimaryButton(label: 'Save', onTap: () => Navigator.pop(c, ctrl.text.trim())),
+              PrimaryButton(
+                  label: 'Save',
+                  onTap: () => Navigator.pop(c, ctrl.text.trim())),
             ],
           ),
         ),
@@ -290,7 +338,9 @@ class _DeviceCard extends ConsumerWidget {
     );
     if (name != null && name.isNotEmpty) {
       await ref.read(nodeNameProvider.notifier).rename(name);
-      ref.read(toastProvider.notifier).show('Renamed to $name', tone: ToastTone.success);
+      ref
+          .read(toastProvider.notifier)
+          .show('Renamed to $name', tone: ToastTone.success);
     }
   }
 }
@@ -309,8 +359,11 @@ class _Field extends StatelessWidget {
           hintStyle: AppType.body(15, color: AppColors.textTertiary),
           filled: true,
           fillColor: AppColors.surfaceHigh,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide.none),
         ),
       );
 }
@@ -344,9 +397,12 @@ class _ModesCard extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(m.label, style: AppType.body(14, weight: FontWeight.w600)),
+                        Text(m.label,
+                            style: AppType.body(14, weight: FontWeight.w600)),
                         const SizedBox(height: 2),
-                        Text(m.detail, style: AppType.body(12, color: AppColors.textSecondary)),
+                        Text(m.detail,
+                            style: AppType.body(12,
+                                color: AppColors.textSecondary)),
                       ],
                     ),
                   ),
@@ -357,9 +413,16 @@ class _ModesCard extends ConsumerWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: s.mode == m ? AppColors.mint : Colors.transparent,
-                      border: Border.all(color: s.mode == m ? AppColors.mint : AppColors.textTertiary, width: 1.5),
+                      border: Border.all(
+                          color: s.mode == m
+                              ? AppColors.mint
+                              : AppColors.textTertiary,
+                          width: 1.5),
                     ),
-                    child: s.mode == m ? const Icon(Icons.check_rounded, size: 14, color: AppColors.ctaText) : null,
+                    child: s.mode == m
+                        ? const Icon(Icons.check_rounded,
+                            size: 14, color: AppColors.ctaText)
+                        : null,
                   ),
                 ],
               ),
@@ -372,8 +435,11 @@ class _ModesCard extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 12),
               child: Row(
                 children: [
-                  Expanded(child: Text('Backup reserve', style: AppType.body(14, weight: FontWeight.w600))),
-                  Text('${s.stormGuard ? 100 : s.reserve}%', style: AppType.mono(14, color: AppColors.mint)),
+                  Expanded(
+                      child: Text('Backup reserve',
+                          style: AppType.body(14, weight: FontWeight.w600))),
+                  Text('${s.stormGuard ? 100 : s.reserve}%',
+                      style: AppType.mono(14, color: AppColors.mint)),
                 ],
               ),
             ),
@@ -430,7 +496,8 @@ class _ReserveSliderState extends ConsumerState<_ReserveSlider> {
         divisions: 18,
         onChanged: widget.enabled
             ? (v) {
-                if ((v.round()) != (_drag ?? widget.value).round()) Haptics.nav();
+                if ((v.round()) != (_drag ?? widget.value).round())
+                  Haptics.nav();
                 setState(() => _drag = v);
               }
             : null,
@@ -457,8 +524,11 @@ class _SecurityCard extends ConsumerWidget {
         _Row(
           icon: AppIcons.key,
           title: 'Owner key',
-          subtitle: key == null ? 'Not registered' : 'Ed25519 · ${SecurityService.fingerprint(key)}',
-          trailing: Icon(key == null ? AppIcons.warning : AppIcons.check, color: key == null ? AppColors.amber : AppColors.mint, size: 20),
+          subtitle: key == null
+              ? 'Not registered'
+              : 'Ed25519 · ${SecurityService.fingerprint(key)}',
+          trailing: Icon(key == null ? AppIcons.warning : AppIcons.check,
+              color: key == null ? AppColors.amber : AppColors.mint, size: 20),
         ),
         const _Divider(),
         _Row(
@@ -498,14 +568,20 @@ class _SecurityCard extends ConsumerWidget {
           title: 'Rotate owner key',
           subtitle: 'Issue a new key and revoke the old one',
           onTap: () async {
-            if (!await _reAuth.confirm('Confirm to rotate the owner key')) return;
+            if (!await _reAuth.confirm('Confirm to rotate the owner key'))
+              return;
             await ref.read(securityServiceProvider).rotate();
             ref.invalidate(ownerKeyProvider);
-            ref.read(toastProvider.notifier).show('New owner key registered', tone: ToastTone.success);
+            ref
+                .read(toastProvider.notifier)
+                .show('New owner key registered', tone: ToastTone.success);
           },
         ),
         const _Divider(),
-        const _Row(icon: AppIcons.devices, title: 'Active sessions', subtitle: 'This phone · local link · now'),
+        const _Row(
+            icon: AppIcons.devices,
+            title: 'Active sessions',
+            subtitle: 'This phone · local link · now'),
       ],
     );
   }
@@ -530,12 +606,19 @@ class _MembersCard extends ConsumerWidget {
               Role.member => 'Member · view and change modes',
               Role.viewer => 'Viewer · read-only',
             },
-            trailing: Text(m.role.label, style: AppType.body(12.5, weight: FontWeight.w600, color: AppColors.mint)),
+            trailing: Text(m.role.label,
+                style: AppType.body(12.5,
+                    weight: FontWeight.w600, color: AppColors.mint)),
             onTap: m.you ? null : () => _roleSheet(context, ref, m),
           ),
           const _Divider(),
         ],
-        _Row(icon: AppIcons.userPlus, title: 'Invite', subtitle: 'Share a QR code or link', color: AppColors.mint, onTap: () => _invite(context, ref)),
+        _Row(
+            icon: AppIcons.userPlus,
+            title: 'Invite',
+            subtitle: 'Share a QR code or link',
+            color: AppColors.mint,
+            onTap: () => _invite(context, ref)),
       ],
     );
   }
@@ -561,8 +644,13 @@ class _MembersCard extends ConsumerWidget {
                   padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
-                      Expanded(child: Text(r.label, style: AppType.body(14, weight: FontWeight.w600))),
-                      if (m.role == r) const Icon(AppIcons.check, color: AppColors.mint, size: 20),
+                      Expanded(
+                          child: Text(r.label,
+                              style:
+                                  AppType.body(14, weight: FontWeight.w600))),
+                      if (m.role == r)
+                        const Icon(AppIcons.check,
+                            color: AppColors.mint, size: 20),
                     ],
                   ),
                 ),
@@ -574,7 +662,8 @@ class _MembersCard extends ConsumerWidget {
   }
 
   Future<void> _invite(BuildContext context, WidgetRef ref) async {
-    if (!await _reAuth.confirm('Confirm to invite someone to your Power Core')) return;
+    if (!await _reAuth.confirm('Confirm to invite someone to your Power Core'))
+      return;
     if (!context.mounted) return;
     final ctrl = TextEditingController();
     var role = Role.member;
@@ -595,18 +684,23 @@ class _MembersCard extends ConsumerWidget {
                 Row(
                   children: [
                     for (final r in [Role.member, Role.viewer]) ...[
-                      _SmallPill(r.label, primary: role == r, onTap: () => set(() => role = r)),
+                      _SmallPill(r.label,
+                          primary: role == r, onTap: () => set(() => role = r)),
                       const SizedBox(width: 8),
                     ],
                   ],
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  role == Role.member ? 'Can view and change modes and reserve.' : 'Can see everything, change nothing.',
+                  role == Role.member
+                      ? 'Can view and change modes and reserve.'
+                      : 'Can see everything, change nothing.',
                   style: AppType.body(12, color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 16),
-                PrimaryButton(label: 'Create invite link', onTap: () => Navigator.pop(c, true)),
+                PrimaryButton(
+                    label: 'Create invite link',
+                    onTap: () => Navigator.pop(c, true)),
               ],
             ),
           ),
@@ -615,7 +709,9 @@ class _MembersCard extends ConsumerWidget {
     );
     if (ok == true && ctrl.text.trim().isNotEmpty) {
       ref.read(settingsProvider.notifier).invite(ctrl.text.trim(), role);
-      ref.read(toastProvider.notifier).show('Invite created for ${ctrl.text.trim()}', tone: ToastTone.success);
+      ref.read(toastProvider.notifier).show(
+          'Invite created for ${ctrl.text.trim()}',
+          tone: ToastTone.success);
     }
   }
 }
@@ -634,36 +730,48 @@ class _PreferencesCard extends ConsumerWidget {
         _Row(
           icon: AppIcons.bell,
           title: 'Outage alerts',
-          trailing: AetherSwitch(value: s.notifyOutage, onChanged: (v) => c.setNotify(outage: v), semanticLabel: 'Outage alerts'),
+          trailing: AetherSwitch(
+              value: s.notifyOutage,
+              onChanged: (v) => c.setNotify(outage: v),
+              semanticLabel: 'Outage alerts'),
         ),
         const _Divider(),
         _Row(
           icon: AppIcons.battery,
           title: 'Low reserve alerts',
-          trailing: AetherSwitch(value: s.notifyLowReserve, onChanged: (v) => c.setNotify(lowReserve: v), semanticLabel: 'Low reserve alerts'),
+          trailing: AetherSwitch(
+              value: s.notifyLowReserve,
+              onChanged: (v) => c.setNotify(lowReserve: v),
+              semanticLabel: 'Low reserve alerts'),
         ),
         const _Divider(),
         _Row(
           icon: AppIcons.download,
           title: 'Firmware updates',
-          trailing: AetherSwitch(value: s.notifyFirmware, onChanged: (v) => c.setNotify(firmware: v), semanticLabel: 'Firmware alerts'),
+          trailing: AetherSwitch(
+              value: s.notifyFirmware,
+              onChanged: (v) => c.setNotify(firmware: v),
+              semanticLabel: 'Firmware alerts'),
         ),
         const _Divider(),
         _Row(
           icon: AppIcons.currency,
           title: 'Units & currency',
           subtitle: 'kWh · ${s.currency}',
-          trailing: Text(s.currency, style: AppType.mono(13, color: AppColors.mint)),
+          trailing:
+              Text(s.currency, style: AppType.mono(13, color: AppColors.mint)),
           onTap: () {
             const order = ['EUR', 'USD', 'GBP', 'TND'];
-            c.setCurrency(order[(order.indexOf(s.currency) + 1) % order.length]);
+            c.setCurrency(
+                order[(order.indexOf(s.currency) + 1) % order.length]);
           },
         ),
         const _Divider(),
         const _Row(
           icon: AppIcons.privacy,
           title: 'Data & privacy',
-          subtitle: 'Telemetry stays on your phone and the Core. No cloud account needed.',
+          subtitle:
+              'Telemetry stays on your phone and the Core. No cloud account needed.',
         ),
       ],
     );
@@ -675,12 +783,16 @@ class _AboutCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => _Card(
         children: [
-          const _Row(icon: AppIcons.info, title: 'Aether Grid', subtitle: 'App 1.0.0 · ${AppBrand.footer}'),
+          const _Row(
+              icon: AppIcons.info,
+              title: 'Aether Grid',
+              subtitle: 'App 1.0.0 · ${AppBrand.footer}'),
           const _Divider(),
           _Row(
             icon: AppIcons.flask,
             title: 'Open-source licences',
-            onTap: () => showLicensePage(context: context, applicationName: AppBrand.name),
+            onTap: () => showLicensePage(
+                context: context, applicationName: AppBrand.name),
           ),
         ],
       );
@@ -703,18 +815,24 @@ class _RemoveDevice extends ConsumerWidget {
                 children: [
                   Text(
                     'The Core keeps running and powering your home. This phone forgets it and its owner key is revoked. You can pair again any time.',
-                    style: AppType.body(13.5, color: AppColors.textSecondary, height: 1.45),
+                    style: AppType.body(13.5,
+                        color: AppColors.textSecondary, height: 1.45),
                   ),
                   const SizedBox(height: 18),
-                  GhostButton(label: 'Remove device', color: AppColors.danger, onTap: () => Navigator.pop(c, true)),
+                  GhostButton(
+                      label: 'Remove device',
+                      color: AppColors.danger,
+                      onTap: () => Navigator.pop(c, true)),
                   const SizedBox(height: 8),
-                  PrimaryButton(label: 'Keep it', onTap: () => Navigator.pop(c, false)),
+                  PrimaryButton(
+                      label: 'Keep it', onTap: () => Navigator.pop(c, false)),
                 ],
               ),
             ),
           );
           if (ok != true) return;
-          if (!await _reAuth.confirm('Confirm to remove the Power Core')) return;
+          if (!await _reAuth.confirm('Confirm to remove the Power Core'))
+            return;
           await ref.read(securityServiceProvider).wipe();
           await ref.read(settingsProvider.notifier).reset();
           if (context.mounted) context.go(Routes.onboarding);

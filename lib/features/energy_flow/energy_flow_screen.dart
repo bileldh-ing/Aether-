@@ -96,16 +96,21 @@ class EnergyFlowScreen extends ConsumerWidget {
   }
 
   String _summary(EnergySnapshot s) {
-    if (!s.nodeOnline)
+    if (!s.nodeOnline) {
       return 'The Core is offline. Showing the last reading it sent.';
-    if (!s.gridOnline)
+    }
+    if (!s.gridOnline) {
       return 'Grid is down. Your home is running on solar and stored energy.';
-    if (s.gridW < -20)
+    }
+    if (s.gridW < -20) {
       return 'Solar covers the house and the surplus is flowing to the grid.';
-    if (s.batteryW > 20)
+    }
+    if (s.batteryW > 20) {
       return 'Solar is powering the house and filling the Core.';
-    if (s.batteryW < -20)
+    }
+    if (s.batteryW < -20) {
       return 'The Core is powering your home from stored energy.';
+    }
     return 'Everything is balanced. The Core is standing by.';
   }
 }

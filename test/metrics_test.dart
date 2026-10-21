@@ -2,7 +2,8 @@ import 'package:aether_grid/domain/entities/entities.dart';
 import 'package:aether_grid/domain/metrics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-DailyStats _day(int i, {required double home, required double import}) => DailyStats(
+DailyStats _day(int i, {required double home, required double import}) =>
+    DailyStats(
       date: DateTime(2026, 10, 1).add(Duration(days: i)),
       solarKwh: 14,
       homeKwh: home,
@@ -45,7 +46,9 @@ void main() {
   });
 
   group('Metrics.independenceStreak', () {
-    test('counts back from the most recent day and stops at first dependent day', () {
+    test(
+        'counts back from the most recent day and stops at first dependent day',
+        () {
       final days = [
         _day(0, home: 10, import: 0),
         _day(1, home: 10, import: 4), // dependent
@@ -57,7 +60,10 @@ void main() {
     });
     test('empty history and a dependent last day both give 0', () {
       expect(Metrics.independenceStreak(const []), 0);
-      expect(Metrics.independenceStreak([_day(0, home: 10, import: 0), _day(1, home: 10, import: 3)]), 0);
+      expect(
+          Metrics.independenceStreak(
+              [_day(0, home: 10, import: 0), _day(1, home: 10, import: 3)]),
+          0);
     });
   });
 
@@ -94,7 +100,8 @@ void main() {
         );
 
     test('priority: fault > updating > offline > low reserve > island', () {
-      expect(derive(fault: true, updating: true, nodeOnline: false), NodeState.fault);
+      expect(derive(fault: true, updating: true, nodeOnline: false),
+          NodeState.fault);
       expect(derive(updating: true, nodeOnline: false), NodeState.updating);
       expect(derive(nodeOnline: false, soc: 0.05), NodeState.offline);
       expect(derive(soc: 0.10, gridOnline: false), NodeState.lowReserve);
@@ -114,7 +121,12 @@ void main() {
 
   group('DailyStats', () {
     test('self-sufficiency and independence', () {
-      final d = DailyStats(date: DateTime(2026, 10, 20), solarKwh: 12, homeKwh: 10, importKwh: 1, exportKwh: 3);
+      final d = DailyStats(
+          date: DateTime(2026, 10, 20),
+          solarKwh: 12,
+          homeKwh: 10,
+          importKwh: 1,
+          exportKwh: 3);
       expect(d.selfConsumptionPct, closeTo(75, 0.001));
       expect(d.selfSufficiencyPct, closeTo(90, 0.001));
       expect(d.independent, isFalse);
