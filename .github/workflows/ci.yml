@@ -130,6 +130,24 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
 
+      - name: Publish rolling demo release
+        if: github.event_name == 'push'
+        run: |
+          git tag -f demo-latest
+          git push -f origin demo-latest
+
+      - uses: softprops/action-gh-release@v2
+        if: github.event_name == 'push'
+        with:
+          tag_name: demo-latest
+          name: Aether Grid demo build (latest main)
+          prerelease: true
+          body: |
+            Release APK built from ${{ github.sha }} on every push to main.
+            Debug-signed demo build: runs fully offline against the built-in simulator.
+            Long-press the avatar on the dashboard for scenario controls.
+          files: build/app/outputs/flutter-apk/app-release.apk
+
       - name: Publish build log on failure
         if: failure() && github.event_name == 'push'
         run: |

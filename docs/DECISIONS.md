@@ -69,3 +69,18 @@ These are display estimates only and are labelled as such in the UI.
 ## 7. Demo scenarios
 
 Long-press the avatar on the dashboard to open the scenario sheet: trigger outage, restore grid, low reserve, firmware available, node offline, fast-forward 6 h, component gallery, reset demo.
+
+## 8. Dependencies & platform
+
+| # | Decision | Why |
+|---|----------|-----|
+| D5 | Icons come from Flutter's bundled **Material rounded** set, behind `AppIcons`. | `phosphor_flutter` (last release 2023) extends `IconData`, which is a `final` class in current Flutter and no longer compiles. One file swaps the set if needed. |
+| D6 | `flutter_blue_plus` pinned to **1.36.x**. | 1.36 compiles against the app's `compileSdk`; 2.x adds a build-time licence ping that a demo build should not make. |
+| D7 | `compileSdk = 37`, core-library desugaring on, `MainActivity` is a `FlutterFragmentActivity`. | Required by `permission_handler`, `flutter_local_notifications` and `local_auth` respectively. |
+| D8 | Release APK is signed with the debug key. | Demo/review build only; a real keystore belongs in CI secrets. |
+
+## 9. Quality gates
+
+- CI (GitHub Actions) runs `dart format --set-exit-if-changed`, `flutter analyze` (infos are fatal) and `flutter test` on every push.
+- `test/layout_smoke_test.dart` renders every route and every home tab at 360×740, 390×844 and 430×932 and fails on any overflow or exception.
+- `test_screens/` renders the main screens to PNG on CI for visual review against the reference screens.

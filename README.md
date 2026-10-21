@@ -1,8 +1,22 @@
 # Aether Grid
 
+[![CI](https://github.com/bileldh-ing/Aether-/actions/workflows/ci.yml/badge.svg)](https://github.com/bileldh-ing/Aether-/actions/workflows/ci.yml)
+
 A premium, dark smart-energy companion app for the **Aether Smart Home Power Core** — a 1,024 Wh home battery with three solar microinverters. Built with Flutter (Dart 3, null-safe) for Android and iOS.
 
 The whole experience — onboarding → Bluetooth pairing → secure commissioning → live dashboard → grid outage and restore — runs **fully offline** against a realistic, deterministic device simulator, so it can be demoed and reviewed without hardware.
+
+<p align="center">
+  <img src="docs/screenshots/03_onboarding_3.png" width="200" alt="Onboarding" />
+  <img src="docs/screenshots/05_dashboard.png" width="200" alt="Dashboard" />
+  <img src="docs/screenshots/06_dashboard_outage.png" width="200" alt="Island mode during an outage" />
+  <img src="docs/screenshots/10_energy_flow.png" width="200" alt="Energy flow" />
+</p>
+
+## Try it
+
+- **Android:** download `app-release.apk` from the [demo-latest release](https://github.com/bileldh-ing/Aether-/releases/tag/demo-latest) (rebuilt on every push to `main`).
+- **From source:** see [Run it](#run-it).
 
 ## Highlights
 
@@ -19,7 +33,8 @@ The whole experience — onboarding → Bluetooth pairing → secure commissioni
 ```bash
 flutter pub get
 flutter run            # Android or iOS device / emulator
-flutter test           # unit tests (metrics + simulator)
+flutter test           # unit + layout smoke tests
+flutter test test_screens --update-goldens   # re-render docs screenshots
 flutter analyze
 ```
 
@@ -64,6 +79,25 @@ Dependencies flow inward: `features → domain ← data`. UI only ever talks to 
 1. Implement `PowerNodeRepository` by composing `BleProvisioningSource` (scan, pair, commission) and `LiveLinkSource` (telemetry, commands over WebSocket or MQTT).
 2. Set `AppConfig(useMockDevice: false, liveLinkUri: …)` and bind the new class in `powerNodeRepositoryProvider`.
 3. Nothing in `features/` changes. Scenario hooks disappear automatically because only the simulator implements `ScenarioControl`.
+
+## Screens
+
+| Onboarding | | | Permissions |
+|---|---|---|---|
+| ![](docs/screenshots/01_onboarding_1.png) | ![](docs/screenshots/02_onboarding_2.png) | ![](docs/screenshots/03_onboarding_3.png) | ![](docs/screenshots/04_permissions.png) |
+| **Dashboard** | **Outage (island mode)** | **Solar** | **Insights** |
+| ![](docs/screenshots/05_dashboard.png) | ![](docs/screenshots/06_dashboard_outage.png) | ![](docs/screenshots/07_solar.png) | ![](docs/screenshots/08_insights.png) |
+| **Settings** | **Energy flow** | **Independence streak** | **Component gallery** |
+| ![](docs/screenshots/09_settings.png) | ![](docs/screenshots/10_energy_flow.png) | ![](docs/screenshots/11_streak.png) | ![](docs/screenshots/12_gallery.png) |
+
+Screens are rendered headlessly on CI (`test_screens/`) from the real widgets and the simulator at 12:30 on a clear day.
+
+## Quality
+
+- `flutter analyze`: zero issues (infos are fatal in CI).
+- Unit tests for every metric formula and the simulator's state machine (outage, restore, low reserve, offline, fast-forward, commissioning).
+- Layout smoke tests: every route and every home tab at 360×740, 390×844 and 430×932, failing on any overflow.
+- CI on every push: format, analyze, tests, screen renders and a release APK.
 
 ## Decisions
 
